@@ -24,7 +24,6 @@ def strip_tags(soup, invalid_tags):
     for match in soup.findAll(invalid_tags):
         match.replaceWithChildren()
 
-
     return soup
 
 
@@ -48,16 +47,18 @@ def sanitize_html(value):
     soup = strip_tags(soup, invalid_tags)
 
 
-    # Delete any invalid tags
-    for tag in soup.findAll(True):
-        for attribute in ["class", "id", "name", "style"]:
-            del tag[attribute]
 
 
     for tag in soup.findAll(True):
         if tag.name not in VALID_TAGS:
             tag.replaceWith('')
             tag.hidden = True
+
+    # Delete any invalid tags
+    for tag in soup.findAll(True):
+        for attribute in ["class", "id", "name", "width"]:
+            del tag[attribute]
+
 
     empty_tags = soup.findAll(lambda tag: tag.name == True and not tag.contents and (tag.string is None or not tag.string.strip()))
     [empty_tag.extract() for empty_tag in empty_tags]
@@ -74,15 +75,16 @@ html = open(filename).read()
 #print html
 
 invalid_tags = ['div']
-VALID_TAGS = ['p','a','img','ul','li','ol','br','h1','h2','h3','h4','h5',
-                'strong','em','hr','body','head','html','title','pre','code','div']
+VALID_TAGS = ['p','a','center','img','ul','li','ol','br','h1','h2','h3','h4','h5',
+                'strong','em','hr','body','head','html','title','pre','code','div',
+                'table','tr','td']
 
 #sanitize_html(html)
 newhtml = sanitize_html(html)
 
 
 
-#print newhtml
+print newhtml
 anotherfilename = filename+".tmp"
 anotherfile = open(anotherfilename,'w')
 anotherfile.write(newhtml)
@@ -91,6 +93,3 @@ anotherfile.close()
 processargs = ["fop","-xml",anotherfilename,"-xsl",stylesheet,"-pdf",output]
 subprocess.Popen(processargs)
 
-
-
-#print strip_tags(html, invalid_tags)

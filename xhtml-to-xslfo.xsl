@@ -870,8 +870,8 @@
     =============================================== -->
 
   <xsl:template match="img">
-    <fo:block space-after="12pt">
-      <fo:external-graphic src="{@src}">
+    <fo:block space-after="12pt" max-width="300px">
+      <fo:external-graphic content-width="scale-to-fit" content-height="scale-to-fit" max-width="450px" max-height="400px" src="{@src}">
         <xsl:if test="@width">
           <xsl:attribute name="width">
             <xsl:choose>
