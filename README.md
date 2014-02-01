@@ -4,6 +4,12 @@ LameStation Doc Tools
 Here is a sample incantation of doctor-builder
 
 <pre>
+sudo apt-get install python-beautifulsoup fop xsltproc libxml2-utils tidy recode
+</pre>
+
+
+
+<pre>
 ./doctor-builder.py -o blah.pdf Drawing-Text_9011324.html 
 </pre>
 
