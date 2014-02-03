@@ -417,7 +417,7 @@
     of contents.
     =============================================== -->
 
-  <!--    <xsl:call-template name="toc"/> -->
+       <xsl:call-template name="toc"/> -->
 
   <!-- ============================================
     This one line of code processes everything in 
@@ -681,33 +681,35 @@
     of the anchor point as the id.
     =============================================== -->
 
-  <xsl:template match="h1">
-      <fo:block break-before="page">
-          <fo:leader leader-pattern="rule" leader-length.maximum="100%" leader-length.optimum="100%"/>
-      </fo:block>
-      <fo:block font-size="28pt" line-height="32pt"
-          background-color="#007FFF" color="#FFFFFF"
-          keep-with-next="always"
-          space-after="22pt" font-family="Arcade">
-          <xsl:attribute name="id">
-              <xsl:choose>
-                  <xsl:when test="@id">
-                      <xsl:value-of select="@id"/>
-                  </xsl:when>
-                  <xsl:when test="name(preceding-sibling::*[1]) = 'a' and
-                      preceding-sibling::*[1][@name]">
-                      <xsl:value-of select="preceding-sibling::*[1]/@name"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                      <xsl:value-of select="generate-id()"/>
-                  </xsl:otherwise>
-              </xsl:choose>
-          </xsl:attribute>
-          <xsl:apply-templates select="*|text()"/>
-      </fo:block>
-  </xsl:template>
+ <xsl:template match="h1 | book_sectiontitle">
+     <fo:block break-before="page">
+         <fo:leader leader-pattern="rule" leader-length.maximum="100%" leader-length.optimum="100%"/>
+     </fo:block>
+     <fo:block font-size="28pt" line-height="32pt"
+         background-color="#007FFF" color="#FFFFFF"
+         keep-with-next="always"
+         space-after="22pt" font-family="Arcade">
+         <xsl:attribute name="id">
+             <xsl:choose>
+                 <xsl:when test="@id">
+                     <xsl:value-of select="@id"/>
+                 </xsl:when>
+                 <xsl:when test="name(preceding-sibling::*[1]) = 'a' and
+                     preceding-sibling::*[1][@name]">
+                     <xsl:value-of select="preceding-sibling::*[1]/@name"/>
+                 </xsl:when>
+                 <xsl:otherwise>
+                     <xsl:value-of select="generate-id()"/>
+                 </xsl:otherwise>
+             </xsl:choose>
+         </xsl:attribute>
 
-  <!-- ============================================
+         <xsl:value-of select="count(ancestor::book_section)"/>
+         <xsl:apply-templates select="*|text()"/>
+     </fo:block>
+ </xsl:template>
+
+ <!-- ============================================
     <h2> is in a slightly smaller font than an <h1>,
     and it doesn't have a page break or a line.
     =============================================== -->
@@ -882,6 +884,11 @@
                   </xsl:attribute>
               </xsl:if>
           </fo:external-graphic>
+          <fo:block font-size="13pt" line-height="15pt" font-weight="bold"
+              space-after="12pt" text-align="center" >
+              Figure <xsl:number level="any" count="img" />
+          </fo:block>
+
       </fo:block>
   </xsl:template>
 
@@ -1415,7 +1422,7 @@
           click any of the topics below to link directly to 
           that section.
       </fo:block>
-      <xsl:for-each select="/html/body//h1 |
+      <xsl:for-each select="/html/body//h1 | /html/body//book_sectiontitle |
           /html/body//h2 | 
           /html/body//h3 |
           /html/body//h4">
@@ -1424,7 +1431,7 @@
               text-indent="-1cm">
               <xsl:attribute name="start-indent">
                   <xsl:choose>
-                      <xsl:when test="name() = 'h1'">
+                      <xsl:when test="name() = 'h1' or name() ='book_sectiontitle'">
                           <xsl:text>1cm</xsl:text>
                       </xsl:when>
                       <xsl:when test="name() = 'h2'">
@@ -1501,7 +1508,7 @@
           <fo:bookmark internal-destination="TableOfContents">
               <fo:bookmark-title>Table of Contents</fo:bookmark-title>
           </fo:bookmark>
-          <xsl:for-each select="/html/body//h1">
+          <xsl:for-each select="/html/body//h1 | /html/body//book_sectiontitle">
               <xsl:variable name="current-h1" select="generate-id()"/>
               <fo:bookmark starting-state="hide">
                   <xsl:attribute name="internal-destination">

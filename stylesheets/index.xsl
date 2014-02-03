@@ -20,12 +20,12 @@
         </head>
     </xsl:template>
 
-    <!--    <xsl:template match="title">
+    <xsl:template match="title">
         <title>
             <xsl:variable name="mainTitle" select=".|text()"/>
         </title>
     </xsl:template>
-    -->
+    
 
     <xsl:template match="html">
         <html>
@@ -54,7 +54,7 @@
     <xsl:template match="ul/li/a">
         <xsl:variable name="pageLink" select="@href"/>
         <xsl:variable name="pageName" select=".|text()"/>
-        <h1><xsl:value-of select="$pageName" /></h1>
+        <book_sectiontitle><xsl:value-of select="$pageName" /></book_sectiontitle>
         <xsl:copy-of select="document($pageLink)//div[@id='main-content']" />
     </xsl:template>
 </xsl:transform>
