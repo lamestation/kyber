@@ -1,0 +1,11 @@
+<fop version="1.0">
+  <renderers>
+    <renderer mime="application/pdf">
+      <fonts>
+        <font kerning="yes" embed-url="/usr/share/fonts/truetype/ARCADE_I.TTF" embedding-mode="subset">
+        <font-triplet name="Arcade" style="normal" weight="normal"/>
+        </font>
+      </fonts>
+    </renderer>
+  </renderers>
+</fop>

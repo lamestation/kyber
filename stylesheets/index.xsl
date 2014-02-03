@@ -42,7 +42,9 @@
     <xsl:template match="br"></xsl:template>
 
     <xsl:template match="ul">
+        <book_section>
             <xsl:apply-templates select="*|text()"/>
+        </book_section>
     </xsl:template>
 
     <xsl:template match="ul/li">

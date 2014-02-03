@@ -311,6 +311,7 @@
   <xsl:template match="footer"></xsl:template>
   <xsl:template match="section"></xsl:template>
   <xsl:template match="div[@class='page-metadata']"></xsl:template>
+  <xsl:template match="div[@class='plugin_pagetree']"></xsl:template>
   <xsl:template match="div[@id='main-header']"></xsl:template>
   <xsl:template match="span"></xsl:template>
   <xsl:template match="h1[@id='title-heading']"></xsl:template>
@@ -685,8 +686,9 @@
           <fo:leader leader-pattern="rule" leader-length.maximum="100%" leader-length.optimum="100%"/>
       </fo:block>
       <fo:block font-size="28pt" line-height="32pt"
+          background-color="#007FFF" color="#FFFFFF"
           keep-with-next="always"
-          space-after="22pt" font-family="serif">
+          space-after="22pt" font-family="Arcade">
           <xsl:attribute name="id">
               <xsl:choose>
                   <xsl:when test="@id">
@@ -1025,8 +1027,8 @@
     =============================================== -->
 
   <xsl:template match="pre">
-      <fo:block font-family="monospace"
-          border-style="solid" border-width="1px" border-color="#000000"
+      <fo:block font-family="monospace" font-size="80%"
+          background-color="#dddddd"
           white-space-collapse="false" wrap-option="no-wrap"
           linefeed-treatment="preserve" white-space-treatment="preserve">
           <xsl:apply-templates select="*|text()"/>
@@ -1113,17 +1115,6 @@
 
   <xsl:template match="table">
       <fo:table table-layout="fixed" inline-progression-dimension="100%">
-          <xsl:choose>
-              <xsl:when test="@cols">
-                  <xsl:call-template name="build-columns">
-                      <xsl:with-param name="cols" 
-                          select="concat(@cols, ' ')"/>
-                  </xsl:call-template>
-              </xsl:when>
-              <xsl:otherwise>
-                  <fo:table-column column-width="200pt"/>
-              </xsl:otherwise>
-          </xsl:choose>
           <fo:table-body>
               <xsl:apply-templates select="*"/>
           </fo:table-body>
@@ -1148,16 +1139,6 @@
       <fo:table-cell 
           padding-start="3pt" padding-end="3pt"
           padding-before="3pt" padding-after="3pt">
-          <xsl:if test="@colspan">
-              <xsl:attribute name="number-columns-spanned">
-                  <xsl:value-of select="@colspan"/>
-              </xsl:attribute>
-          </xsl:if>
-          <xsl:if test="@rowspan">
-              <xsl:attribute name="number-rows-spanned">
-                  <xsl:value-of select="@rowspan"/>
-              </xsl:attribute>
-          </xsl:if>
           <xsl:if test="@border='1' or 
               ancestor::tr[@border='1'] or
               ancestor::thead[@border='1'] or

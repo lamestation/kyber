@@ -3,18 +3,12 @@ LameStation Doc Tools
 
 Here is a sample incantation of doctor-builder
 
-<pre>
-sudo apt-get install python-beautifulsoup fop xsltproc libxml2-utils tidy recode
-</pre>
+    sudo apt-get install python-beautifulsoup fop xsltproc libxml2-utils tidy recode
 
+Here's how to execute this script
 
-
-<pre>
-./doctor-builder.py -o blah.pdf Drawing-Text_9011324.html 
-</pre>
+    ./runit.sh
 
 Here is the syntax for the demo provided by IBM
 
-<pre>
-fop -xml everything.html -xsl xhtml-to-xslfo.xsl -pdf everything.pdf
-</pre>
+    fop -xml everything.html -xsl xhtml-to-xslfo.xsl -pdf everything.pdf
