@@ -27,18 +27,20 @@ On Ubuntu, installation is easy. Install any needed dependencies first, probably
     sudo apt-get install xsltproc libxml2-utils tidy
 
     # LaTeX
-    sudo apt-get install texlive-latex-base texlive-latex-extra texlive-latex-recommended lacheck
+    sudo apt-get install texlive-latex-base texlive-latex-extra
+    sudo apt-get install texlive-latex-recommended lacheck
 
 ## Usage
 
 First, open up your Confluence installation and [export your space in HTML format](https://confluence.atlassian.com/display/DOC/Exporting+Confluence+Pages+and+Spaces+to+HTML).
 If you don't have a Confluence installation, [get one, it's awesome!](https://www.atlassian.com/software/confluence)
 
-Once you've downloaded your space export, download the project and browse to the project root. The top-level bash script should get you started. Simply
+Once you've downloaded your space export, download the project and browse to the project root. Run the kyber script to get you started. Simply
 pass the export as a parameter.
 
-    ./runit.sh path/to/confluence-space.html.zip
+    ./kyber path/to/confluence-space.html.zip
 
+**BE CAREFUL**: Kyber currently does **zero** error checking on its input; be mindful of what you're doing.
 Watch as your space is rendered in glorious PDF.
 
 ## Troubleshooting
@@ -60,4 +62,4 @@ Make sure you have Python, xsltproc, and LaTeX installed.
  * Need to make sure no divs or brs get through
  * Need to find away to clean up all the white space being created
  * Need to properly concatenate subsubsection so that newlines are not added.
- * Need to migrate to makefile so that there is strict error checking on build
+ * Need to migrate to makefile so that there is strict error checking on build (currently there is **NO** error checking at all)
