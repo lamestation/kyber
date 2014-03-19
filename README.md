@@ -1,26 +1,27 @@
 Kyber
 =====
 
-Kyber is a free, open-source documentation workflow for
-Confluence that allows unlimited customization of the final output.
+Kyber is a free and open-source documentation workflow for
+Confluence.
 
-Named for the infamous mountain pass of ancient lore, Kyber provides
-the link that allows data to move seamlessly between your project
-and wiki environment.
+But what does it do?
 
-Designed initially to address the needs of the LameStation
-project, Kyber has grown into a full-fledged documentation solution.
+* Doxygen-style source code markup rendered to Confluence pages
+* LaTeX-driven PDF generation from Confluence pages; no expensive enterprise solution
+* Propeller Spin and PASM language definitions (finally!)
+* Customizable with the full power of LaTeX
+* Full UTF-8 and internationization support throughout
+* Intelligent image scaling built into the environment
 
-Features supported:
-
-* Doxygen-style source code markup rendered as Confluence pages
-* Fully customizable PDF generation from Confluence pages
+Like the mountain pass that connected much of the ancient world, Kyber is
+the link between your project and your wiki, keeping them connected and
+mutually up-to-date.
 
 ## Installation
 
-On Ubuntu, the prerequisites needed are as follows:
+On Ubuntu, installation is easy. Install any needed dependencies first, probably:
 
-    sudo apt-get install python-beautifulsoup fop xsltproc libxml2-utils tidy
+    sudo apt-get install xsltproc libxml2-utils tidy texlive-latex-base texlive-latex-extra texlive-latex-recommended lacheck
 
 ## Usage
 
@@ -30,3 +31,18 @@ HTML export as a parameter.
     ./runit.sh PATH/TO/ZIPFILE.html.zip
 
 Watch as your space is rendered in glorious PDF.
+
+## To Do
+
+ * Figure out how figures, need to strip out extra file garbage like before.
+ * Need to format the info boxes properly.
+ * Need to ensure images always fit within page
+ * Need to change verbatim output of pandoc to listing
+ * Need to create user macros to allow formatting of cool things.
+ * Fix table output
+ * Fix graphics inclusion (wtf does confluence do)
+ * Properly escape ampersand then convert it back to real character before running to latex
+ * Need to make sure no divs or brs get through
+ * Need to find away to clean up all the white space being created
+ * Need to properly concatenate subsubsection so that newlines are not added.
+ * Need to migrate to makefile so that there is strict error checking on build
