@@ -17,20 +17,35 @@ Like the mountain pass that connected much of the ancient world, Kyber is
 the link between your project and your wiki, keeping them connected and
 mutually up-to-date.
 
+*Note: There is some support for XSL-FO but this is being deprecated in favor of LaTeX.*
+
 ## Installation
 
 On Ubuntu, installation is easy. Install any needed dependencies first, probably:
 
-    sudo apt-get install xsltproc libxml2-utils tidy texlive-latex-base texlive-latex-extra texlive-latex-recommended lacheck
+    # XHTML
+    sudo apt-get install xsltproc libxml2-utils tidy
+
+    # LaTeX
+    sudo apt-get install texlive-latex-base texlive-latex-extra texlive-latex-recommended lacheck
 
 ## Usage
 
-The top-level bash script should get you started. To run, pass a Cofluence
-HTML export as a parameter.
+First, open up your Confluence installation and [export your space in HTML format](https://confluence.atlassian.com/display/DOC/Exporting+Confluence+Pages+and+Spaces+to+HTML).
+If you don't have a Confluence installation, [get one, it's awesome!](https://www.atlassian.com/software/confluence)
 
-    ./runit.sh PATH/TO/ZIPFILE.html.zip
+Once you've downloaded your space export, download the project and browse to the project root. The top-level bash script should get you started. Simply
+pass the export as a parameter.
+
+    ./runit.sh path/to/confluence-space.html.zip
 
 Watch as your space is rendered in glorious PDF.
+
+## Troubleshooting
+
+The conversion is done in three separate stages: document assembly, XSL conversion to LaTeX, LaTeX compilation to PDF.
+
+Make sure you have Python, xsltproc, and LaTeX installed.
 
 ## To Do
 
