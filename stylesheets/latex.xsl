@@ -43,7 +43,7 @@
     <xsl:template match="table[@class='gliffy-macro-table']/tr/td/table[@class='gliffy-macro-inner-table']/tr/td/img[@class='gliffy-macro-image']">
         <xsl:text>\begin{figure}[H]
             \centering
-            \includegraphics[width = 2.5in]{</xsl:text>
+            \includegraphics[scale=0.3]{</xsl:text>
         <xsl:value-of select="@src" /><xsl:text>}\\
             \end{figure}
         </xsl:text>

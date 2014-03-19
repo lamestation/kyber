@@ -5,7 +5,6 @@ if [ -z "$1" ] ; then
     exit
 fi
 
-
 OUTPUT_NAME="output"
 
 HOME_DIR="$(pwd)"
@@ -14,7 +13,6 @@ STYLE_DIR="${HOME_DIR}/stylesheets"
 CONFIG_DIR="${HOME_DIR}"
 
 OUTPUT_DOC="${OUTPUT_DIR}/final.xml"
-
 
 INPUT_SPACE="`zipinfo -1 "$1" *index.html`"
 
@@ -44,25 +42,28 @@ cp -ur ${INPUT_DIR}/attachments ${HOME_DIR}/
 
 cd ${OUTPUT_DIR}
 
+# Build single master page using space index page.
 xsltproc ${STYLE_DIR}/index.xsl index.html > ${OUTPUT_DOC}
 
 cd ${HOME_DIR}
 
 
-
+# Convert master page to LaTeX, and combine with formatting rules
 cp -f header.tex output.tex 
 cat ${OUTPUT_DOC} | tidy -xml -indent -utf8 > ${OUTPUT_DOC}2
 xsltproc ${STYLE_DIR}/latex.xsl ${OUTPUT_DOC}2 | sed -e 's/^[ \t]*//g' \
         -e 's/\$/\\$/g' -e 's/&/\\\&/g' >> output.tex # Make sure to clean up special characters for latex
-#pandoc -f html -t latex --chapters ${OUTPUT_DOC} >> output.tex 
 cat footer.tex >> output.tex
 
+#pandoc -f html -t latex --chapters ${OUTPUT_DOC} >> output.tex 
 #sed -i -e 's/longtable/table/g' output.tex
 #sed -i -e '/noalign/ d' output.tex
 #sed -i -e 's/includegraphics/&[scale=0.25,resolution=300]/g' output.tex
 
-pdflatex output.tex #; pdflatex output.tex ;  evince output.pdf 
 
+# Run, rerun (build cross-references), display
+pdflatex output.tex ; pdflatex output.tex ; evince output.pdf 
+ 
 #cd ${INPUT_DIR}
 ##
 #fop -xml ${OUTPUT_DOC} -xsl ${STYLE_DIR}/document.xsl -foout ${OUTPUT_DIR}/${OUTPUT_NAME}.fo
