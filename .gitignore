@@ -1,6 +1,8 @@
 *.pdf
 *.zip
 output/
+attachments/
+output.tex
 *.aux
 *.log
 *.out

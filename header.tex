@@ -1,7 +1,6 @@
 \documentclass[twoside,openright]{book}
 
-
-\usepackage[utf8x]{inputenc}
+\usepackage[utf8x]{inputenc}    % support UNICODE; very important!!
 \usepackage{amsmath}
 \usepackage{verbatim}
 \usepackage{graphicx}
@@ -70,6 +69,7 @@
 }}}
 
 \usepackage{pdfpages}
+\usepackage{longtable}
 
 
 \usepackage{makeidx}
@@ -105,35 +105,4 @@
 \tableofcontents
 
 \newpage
-
-
-
-    \include{test/abstract}
-
 \mainmatter
-
-\part{Hardware}
-\AddToShipoutPicture*{\ChapterBackgroundPic}
-\clearpage
-
-\chapter{Assembly}
-
-
-    \include{test/file}
-
-								\newpage
-\part{Software}
-\AddToShipoutPicture*{\ChapterBackgroundPic}
-\clearpage
-\chapter{Display}
-    \include{test/otherfile}
-    \include{test/blitting}
-\newpage
-\section{Frequencytiming}
-
-    \include{test/newstuff}
-
-\backmatter
-    \printindex
-
-\end{document}

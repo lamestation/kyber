@@ -22,9 +22,9 @@ INPUT_DIR="${HOME_DIR}/`dirname  $INPUT_SPACE`"
 
 #rm -rf $INPUT_DIR
 #rm -rf $OUTPUT_DIR
-
-unzip "$1"
-mkdir -p $OUTPUT_DIR
+#
+#unzip "$1"
+#mkdir -p $OUTPUT_DIR
 
 cd $INPUT_DIR
 
@@ -40,19 +40,37 @@ do
 done
 
 cp -ur ${INPUT_DIR}/attachments ${OUTPUT_DIR}/
+cp -ur ${INPUT_DIR}/attachments ${HOME_DIR}/
 
 cd ${OUTPUT_DIR}
 
 xsltproc ${STYLE_DIR}/index.xsl index.html > ${OUTPUT_DOC}
 
-cd ${INPUT_DIR}
+cd ${HOME_DIR}
 
-fop -xml ${OUTPUT_DOC} -xsl ${STYLE_DIR}/document.xsl -foout ${OUTPUT_DIR}/${OUTPUT_NAME}.fo
-fop -c ${CONFIG_DIR}/config.xml -xml ${OUTPUT_DOC} -xsl ${STYLE_DIR}/document.xsl -pdf ${OUTPUT_DIR}/${OUTPUT_NAME}.pdf
 
-cd ..
 
-#rm -rf $INPUT_DIR
+cp -f header.tex output.tex 
+cat ${OUTPUT_DOC} | tidy -xml -indent -utf8 > ${OUTPUT_DOC}2
+xsltproc ${STYLE_DIR}/latex.xsl ${OUTPUT_DOC}2 | sed -e 's/^[ \t]*//g' \
+        -e 's/\$/\\$/g' -e 's/&/\\\&/g' >> output.tex # Make sure to clean up special characters for latex
+#pandoc -f html -t latex --chapters ${OUTPUT_DOC} >> output.tex 
+cat footer.tex >> output.tex
 
-evince ${OUTPUT_DIR}/${OUTPUT_NAME}.pdf
+#sed -i -e 's/longtable/table/g' output.tex
+#sed -i -e '/noalign/ d' output.tex
+#sed -i -e 's/includegraphics/&[scale=0.25,resolution=300]/g' output.tex
 
+pdflatex output.tex #; pdflatex output.tex ;  evince output.pdf 
+
+#cd ${INPUT_DIR}
+##
+#fop -xml ${OUTPUT_DOC} -xsl ${STYLE_DIR}/document.xsl -foout ${OUTPUT_DIR}/${OUTPUT_NAME}.fo
+#fop -xml ${OUTPUT_DOC} -xsl ${STYLE_DIR}/document.xsl -pdf ${OUTPUT_DIR}/${OUTPUT_NAME}.pdf
+##
+#cd ..
+#
+##rm -rf $INPUT_DIR
+#
+#evince ${OUTPUT_DIR}/${OUTPUT_NAME}.pdf
+#
