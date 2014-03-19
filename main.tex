@@ -1,0 +1,226 @@
+\documentclass[twoside,openright]{book}
+
+
+
+\usepackage{amsmath}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{fixltx2e}		%allows subscript to be used
+\usepackage{float}
+\usepackage{times}
+\usepackage{lastpage}
+\usepackage{subfig}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage[tikz]{bclogo}
+\usepackage{enumitem}
+\setlist{nolistsep}
+
+\usepackage{textcomp}
+
+\definecolor{bgblue}{RGB}{245,243,253}
+\definecolor{ttblue}{RGB}{91,194,224}
+ 
+
+
+%set margins
+%set paper dimensions
+\usepackage[paperwidth=5.5in, paperheight=8.5in]{geometry}
+\usepackage{emptypage}
+
+%set header and footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter\ |\ #1}{}}
+		
+		
+	
+\lhead{\leftmark}
+\rhead{\thepage}
+
+
+%set spacing
+\usepackage{setspace}
+\singlespacing
+
+%CONSOLE TITLE
+\definecolor{lightblue}{rgb}{0.85,1,1} 
+\definecolor{lightgreen}{rgb}{0.8,1,0.9} 
+\definecolor{darkblue}{rgb}{0,0,0.5} 
+\definecolor{darkred}{rgb}{0.6,0,0} 
+
+
+
+\input{format/languages.tex}
+
+
+\usepackage{eso-pic}
+\newcommand\ChapterBackgroundPic{%
+    \put(0,0){%
+        \parbox[b][\paperheight]{\paperwidth}{%
+            \vfill
+            \centering
+            \includegraphics[width=\paperwidth,height=\paperheight,%
+            keepaspectratio]{graphics/bookcover_chapter.png}%
+            \vfill
+}}}
+
+\usepackage{pdfpages}
+
+
+\usepackage{makeidx}
+
+\usepackage[T1]{fontenc}
+\usepackage{titlesec, blindtext, color}
+\definecolor{gray75}{gray}{0.75}
+\newcommand{\hsp}{\hspace{20pt}}
+\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Huge\bfseries}
+
+
+\setcounter{secnumdepth}{1}
+\setcounter{tocdepth}{1}
+
+
+\title{{A Crash Course In LameStation} \\ Digital Synthesis, Computer Architecture, and Electronics Design Explored}
+\date{}
+\author{Brett Weir}
+
+
+
+\begin{document}
+
+\lstset{style=C++}
+
+\frontmatter
+
+\includepdf{graphics/bookcover_front.png}
+\cleardoublepage
+
+		\newpage
+														
+\tableofcontents
+
+\newpage
+
+
+
+    \include{test/abstract}
+
+\mainmatter
+
+\part{Hardware}
+\AddToShipoutPicture*{\ChapterBackgroundPic}
+\clearpage
+
+\chapter{Assembly}
+
+
+    \include{test/file}
+
+								\newpage
+\part{Software}
+\AddToShipoutPicture*{\ChapterBackgroundPic}
+\clearpage
+\chapter{Display}
+    \include{test/otherfile}
+    \include{test/blitting}
+\newpage
+\section{Frequencytiming}
+
+
+%\section{Specifications}
+
+%						\input{specs/specifications.tex}
+%								\newpage				
+								
+								
+																			
+%\section{The Microcontroller}
+%
+%						\input{proppa/proppa.tex}	
+%								\newpage
+%
+%\section{Display}
+%%						\input{display/schem.tex}
+%						\input{display/intro.tex}
+%						\input{display/whymono.tex}
+%					 	\input{display/driver.tex}						
+%
+%					 	\input{display/blitting.tex}
+%
+%						\input{display/contentgeneration.tex}												
+%								\newpage												
+%												
+%												
+%\section{Audio}
+%%						\input{audio/schem.tex}
+%
+%						\input{support/allegfuncgen.tex}
+%						\input{support/mathfuncgen.tex}
+%
+%						\input{support/wav2dat.tex}
+%						\input{support/frequencytablegenerator.tex}
+%
+%						\input{audio/frequencytiming.tex}
+%						%\input{../cprograms/frequencytable_latex.txt}
+%						\input{audio/frequencytiming/propellertiming.tex}
+%			
+%						\input{audio/phaseaccumulator.tex}
+%						\input{audio/typesofsound.tex}
+%								\newpage					
+%								
+%					  \input{audio/asm_spin_interface.tex}
+%						\input{audio/pwm_dac.tex}
+%
+%								\newpage
+%
+%\section{Power}
+%%						\input{power/schem.tex}
+%						\input{power/consumption.tex}
+%
+%								\newpage
+%
+%
+%
+%\section{Controls}
+%%						\input{controls/schem.tex}
+%						\input{controls/joystick.tex}
+%						\input{controls/buttons.tex}
+%
+%								\newpage
+%
+%%\section{Utilities}
+%
+%%						\input{support/intro.tex}
+%
+%
+%
+%\section{Constraints}
+%						\input{constraints/sustainability.tex}
+%
+%
+%
+%\section{Applications}
+%%						\input{apps/schem.tex}
+%						\input{apps/midi_interfacing.tex}
+%						\input{apps/wireless.tex}
+%
+%						\newpage
+%
+%
+%%\section{Source}
+%				%		\input{specs/source.tex}
+%
+%
+%
+%
+%
+
+\backmatter
+    \printindex
+
+\end{document}

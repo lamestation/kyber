@@ -1,0 +1,96 @@
+
+\usepackage{listings}
+\usepackage{courier}
+
+\definecolor{spin_pub}{RGB}{191,223,255}
+\definecolor{spin_pri}{RGB}{191,248,255}
+\definecolor{spin_con}{RGB}{191,248,255}
+\definecolor{spin_dat}{RGB}{191,255,200}
+\definecolor{spin_num}{RGB}{48,136,146}
+\definecolor{spin_str}{RGB}{246,7,47}
+\definecolor{spin_comment}{RGB}{110,110,110}
+\definecolor{spin_operator}{RGB}{0,128,1}
+\definecolor{spin_ctrl}{RGB}{128,128,128}
+
+\lstdefinelanguage{Spin}{
+  classoffset=0,
+  morekeywords={con, var, obj, pub, pri, dat},
+  morekeywords={chipver, clkmode, \_clkmode, clkfreq, \_clkfreq, clkset, \_xinfreq, \_stack, \_free, rcfast, rcslow, xinput, xtal1, xtal2, xtal3, pll1x, pll2x, pll4x, pll8x, pll16x},
+  morekeywords={cogid, cognew, coginit, cogstop, reboot},
+  morekeywords={locknew, lockret, lockclr, lockset, waitcnt, waitpeq, waitpne, waitvid},
+  morekeywords={bytefill, wordfill, longfill, bytemove, wordmove, longmove, lookup, lookupz, lookdown, lookdownz, strsize, strcomp},
+  morekeywords={string, constant, float, round, trunc, file},
+  morekeywords={dira, dirb, ina, inb, outa, outb, cnt, ctra, ctrb, frqa, frqb, phsa, phsb, vcfg, vscl, par, spr},
+  morekeywords={true, false, posx, negx, pi, result},
+  morekeywords={org, fit, res},
+  keywordstyle={\color{black} \bf},
+  classoffset=1,
+  morekeywords={byte, word, long},
+  keywordstyle={\color{darkblue} \bf},
+  classoffset=2,
+  morekeywords={clkset, cogid, coginit, cogstop},
+  morekeywords={locknew, lockret, lockclr, lockset, waitcnt, waitpeq, waitpne, waitvid},
+  morekeywords={if\_always, if\_never, if\_e, if\_ne, if\_a, if\_b, if\_ae, if\_be, if\_c, if\_nc, if\_z, if\_nz, if\_c\_eq\_z, if\_c\_ne\_z, if\_c\_and\_z, if\_c\_and\_nz, if\_nc\_and\_z, if\_nc\_and\_nz, if\_c\_or\_z, if\_c\_or\_nz, if\_nc\_or\_z, if\_nc\_or\_nz, if\_z\_eq\_c, if\_z\_ne\_c, if\_z\_and\_c, if\_z\_and\_nc, if\_nz\_and\_c, if\_nz\_and\_nc, if\_z\_or\_c, if\_z\_or\_nc, if\_nz\_or\_c, if\_nz\_or\_nc},
+  morekeywords={call, djnz, jmp, jmpret, tjnz, tjz, ret, nr, wr, wc, wz},
+  morekeywords={rdbyte, rdword, rdlong, wrbyte, wrword, wrlong},
+  morekeywords={abs, absneg, neg, negc, negnc, negz, negnz, min, mins, max, maxs, add, addabs, adds, addx, addsx, sub, subabs, subs, subx, subsx, sumc, sumnc, sumz, sumnz, mul, muls, and, andn, or, xor, ones, enc, rcl, rcr, rev, rol, ror, shl, shr, sar, cmp, cmps, cmpx, cmpsx, cmpsub, test, testn, mov, movs, movd, movi, muxc, muxnc, muxz, muxnz, hubop, nop},
+  keywordstyle={\color{darkred} \bf},  
+  classoffset=3,
+  morekeywords={if, elseif, ifnot, elseifnot, else, case, other, repeat, from, to, step, until, while, next, quit, return, abort},
+  keywordstyle={\color{spin_ctrl} \bf},  
+  classoffset=4,
+  alsoletter={+,-,=,:,\^,|,~,?,<,>,!,@,\#},
+  morekeywords={+,-,--,++,\^\^,||,~,~~,?,|<,>|,!,NOT,@,@@,=,:=,+=,-=,*=,**=,*,**,/,//,/=,//=,\#>,\#>=,<\#,<\#=,~>,~>=,<<,<<=,>>,>>=,<-,<-=,->,->=,><,><=,\&,\&=,|,|=,\^,\^=,AND,AND=,OR,OR=,==,===,<>,<>=,<,<=,>,>=,=<,=<=,=>,=>=},
+  keywordstyle={\color{spin_operator} \bf},  
+  classoffset=0,
+  morecomment=[l]{'},
+  morecomment=[n]{\{}{\}},
+  commentstyle=\color{spin_comment},
+  numberstyle=\color{spin_num},
+  sensitive=false,
+  showtabs=false,
+  showspaces=false,
+  showstringspaces=false,
+  breaklines=true,
+  breakatwhitespace=true,
+  basicstyle=\footnotesize\ttfamily,
+  numbers=none,
+  frame=single,
+  framesep=0.10in,
+  xleftmargin=0.10in,
+  xrightmargin=0.10in,
+  title=\lstname
+}
+
+
+\lstdefinestyle{C++}{
+language=C++,                % choose the language of the code
+basicstyle=\small,       % the size of the fonts that are used for the code
+numbers=left,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=1,                   % the step between two line-numbers. If it's 1 each line 
+numbersep=10pt,                  % how far the line-numbers are from the code
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=none,	                % adds a frame around the code
+tabsize=1,	                % sets default tabsize to 2 spaces
+captionpos=t,                   % sets the caption-position to bottom
+breaklines=true,                % sets automatic line breaking
+breakatwhitespace=true,        % sets if automatic breaks should only happen at whitespace
+backgroundcolor=\color{white},
+keywordstyle={\color{black} \bf}
+}
+
+\lstdefinestyle{spin}{
+language=Spin,
+backgroundcolor=\color{spin_pub}
+}
+
+
+\lstdefinestyle{pasm}{
+language=Spin,
+backgroundcolor=\color{spin_dat}
+}
+
+

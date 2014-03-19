@@ -20,8 +20,8 @@ INPUT_SPACE="`zipinfo -1 "$1" *index.html`"
 
 INPUT_DIR="${HOME_DIR}/`dirname  $INPUT_SPACE`"
 
-rm -rf $INPUT_DIR
-rm -rf $OUTPUT_DIR
+#rm -rf $INPUT_DIR
+#rm -rf $OUTPUT_DIR
 
 unzip "$1"
 mkdir -p $OUTPUT_DIR
@@ -52,7 +52,7 @@ fop -c ${CONFIG_DIR}/config.xml -xml ${OUTPUT_DOC} -xsl ${STYLE_DIR}/document.xs
 
 cd ..
 
-rm -rf $INPUT_DIR
+#rm -rf $INPUT_DIR
 
 evince ${OUTPUT_DIR}/${OUTPUT_NAME}.pdf
 

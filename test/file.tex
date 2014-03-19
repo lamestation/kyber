@@ -1,0 +1,121 @@
+\section{Powering The Board}
+\subsection{Parts Needed For This Section}
+
+\begin{figure}[H]
+		\centering
+    \includegraphics[width = 2.5in]{attachments/9732135/9797698.jpg}\\
+    \label{fig:zeldatwilight}
+    \caption{\textcopyright  2006 Nintendo. \\ Note the luxurious resolution and detailed texture.}
+\end{figure}
+
+\begin{itemize}
+\item
+  1 x DC barrel jack
+\item
+  1 x Slide switch
+\item
+  1 x 5V regulator
+\item
+  1 x 3.3V regulator
+\item
+  3 x 100$\mu$F capacitors
+\item
+  1 x 4-pin socket
+\item
+  1 x Green LED
+\item
+  1 x 220$\Omega$ resistor
+\item
+  2 x Metric screw
+\item
+  2 x Metric nut
+\end{itemize}
+
+\subsection{Instructions}
+
+The LameStation can be powered in one of two ways; using the on-board
+4AAA battery pack or an external DC power supply. You do not need to
+worry about conflicts between the two. The LS automatically switches
+between the two sources using a shunt switch in the power jack. A
+power-on LED is provided to prove, without a doubt, that the board is
+actually on (you'll be happy to know, trust me).
+
+The battery pack is a large, plastic obstruction to everything else you
+need to assemble, so this is one of the last items to go on the board.
+Instead, solder in the DC barrel jack for some unlimited power fun. Then
+solder in the green LED and series resistor so that whenever you do
+anything, you have a quick sanity check that the power has power at
+least when troubleshooting.
+
+Solder the DC barrel jack into \textbf{J1}. Do not solder in the
+battery until later on. It's helpful for components like this to tape
+or clip the component to the board before attempting to solder it.
+That way it won't move around. I use electrical tape for this purpose.
+You would also do well to get yourself a panoramic vise as it makes
+soldering a million times easier.
+
+Solder the large power switch into \textbf{SW1}.
+
+Solder the 5V and 3.3V regulators into~\textbf{U2} and~\textbf{U3},
+respectively. Bend them to be flat on the board. Do this before
+installing the nearby capacitors or else it will be harder to get your
+fingers around to bend it into place.
+
+Solder 3 100$\mu$F capacitors into~\textbf{C3}, \textbf{C4}, and
+\textbf{C5}. You'll want to leave a small amount of slack. These
+capacitors are polarized, which means they have to be inserted in a
+certain direction. You can determine the positive and negative
+terminals by looking at the body of the capacitor. On the side of one
+of the pins, you will find a strip of minus signs printed on the side.
+This is the negative terminal. Now looking at the PCB, the capacitor's
+footprint will have two holes, and one will have a plus sign. That
+indicates the positive terminal, so make sure that the strip of minus
+signs faces the other side, away from the `+' pad. Another pro tip: if
+you have trouble getting the capacitor to stay on the board while
+soldering, twist the leads around each other so that it will hold to
+the board. You will just clip these off later, so you don't need to
+worry about them touching so it's a nice fast way to get the component
+to hold on.
+
+Solder one of the 4-pin sockets into~\textbf{P4}. These pins provide
+test points where you can
+\href{Taking-Test-Measurements_9732196.html}{connect a voltmeter and
+ammeter across the power supply} to take measurements.
+
+Solder the green LED into~\textbf{D1} and a 220Ω resistor
+into~\textbf{R24}. This will provide a power-on light to indicate when
+the board is turned on, and is also an indicate of when there is a
+short (if the power on but no light comes on).
+
+This completes the power subsystem, except for the battery pack, which
+will be connected later.
+
+~
+
+\begin{bclogo}[couleur=bgblue, arrondi =0 , logo=\bcbombe, barre=none,noborder=true]{Never blow up your LEDs again!}
+\itshape The short lead wire on a capacitor or LED is the cathode, or negative terminal.
+\end{bclogo}
+
+
+
+Icon
+
+\textbf{Watch That Green LED!}
+
+The green LED does more than just tell you the board is on. It is also
+an early warning system that you've done something horribly wrong. If
+you've accidentally soldered something that has created a short in the
+system, the green LED will not turn on, since no power can get to it.
+\textbf{This may be the only warning you have}.
+
+When you add a component, the first thing you should do when powering on
+the board is watch that green LED. If it doesn't come on, \textbf{turn
+off the power immediately}. This will reduce the chance of something
+being fried on the board as a result of your mishap.
+
+Icon
+
+\textbf{Ground Connections}
+
+You may have difficulty soldering connections that are wired to ground.
+Just hold the iron to the pin longer until the solder flows.

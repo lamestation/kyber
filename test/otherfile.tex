@@ -1,0 +1,310 @@
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \hyperref[LameAudio.spin-PublicFunctions]{Public Functions}
+\item
+  \hyperref[LameAudio.spin-PrivateFunctions]{Private Functions}
+\end{itemize}
+
+\hyperdef{}{LameAudio.spin-PublicFunctions}{\subsection{Public
+Functions}\label{LameAudio.spin-PublicFunctions}}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \hyperref[LameAudio.spin-Start]{Start}
+\item
+  \hyperref[LameAudio.spin-SetADSR(attackvar,decayvar,sustainvar,releasevar)]{SetADSR(attackvar,
+  decayvar, sustainvar, releasevar)}
+\item
+  \hyperref[LameAudio.spin-SetWaveform(waveformvar,volumevar)]{SetWaveform(waveformvar,
+  volumevar)}
+\item
+  \hyperref[LameAudio.spin-LoadInstr(instrnum)]{LoadInstr(instrnum)}
+\item
+  \hyperref[LameAudio.spin-PlaySound(channel,note)]{PlaySound(channel,
+  note)}
+\item
+  \hyperref[LameAudio.spin-StopSound(channel)]{StopSound(channel)}
+\item
+  \hyperref[LameAudio.spin-StopAllSound]{StopAllSound}
+\item
+  \hyperref[LameAudio.spin-PlaySequence(songAddrvar)]{PlaySequence(songAddrvar)}
+\item
+  \hyperref[LameAudio.spin-LoadSong(songBarAddrvar)]{LoadSong(songBarAddrvar)}
+\item
+  \hyperref[LameAudio.spin-PlaySong]{PlaySong}
+\item
+  \hyperref[LameAudio.spin-StopSong]{StopSong}
+\item
+  \hyperref[LameAudio.spin-SongPlaying]{SongPlaying}
+\end{itemize}
+
+\hyperdef{}{LameAudio.spin-Start}{\paragraph{Start}\label{LameAudio.spin-Start}}
+
+\textbf{} ~Expand source
+
+\lstset{style=spin}
+\begin{lstlisting}
+PUB Start
+      
+    parameter := @sine
+    channelparam := (INITVAL << 8)
+    channelADSR := LONG[@instruments][0]
+    songchoice := SONGOFF
+    looping := 0  
+    play := 0
+    
+    
+    repeat oscindexer from 0 to OSCREGS-1 step REGPEROSC
+        oscRegister[oscindexer] := 0
+        oscRegister[oscindexer+1] := 0
+        oscRegister[oscindexer+2] := 0
+        oscRegister[oscindexer+3] := 0
+    oscindexer := 0
+    oscindexcounter := 0
+    
+    cognew(@oscmodule, @parameter)    'start assembly cog
+    cognew(LoopingSongParser, @LoopingPlayStack)
+    
+\end{lstlisting}
+
+\hyperdef{}{LameAudio.spin-SetADSR(attackvar,decayvar,sustainvar,releasevar)}{\paragraph{SetADSR(attackvar,
+decayvar, sustainvar,
+releasevar)}\label{LameAudio.spin-SetADSR(attackvar,decayvar,sustainvar,releasevar)}}
+
+\textbf{} ~Expand source
+
+\lstset{style=spin}
+\begin{lstlisting}
+PUB SetADSR(attackvar, decayvar, sustainvar, releasevar)
+
+    channelADSR := (channelADSR & A_MASK) + (attackvar << A_OFFSET)
+    channelADSR := (channelADSR & D_MASK) + (decayvar << D_OFFSET)
+    channelADSR := (channelADSR & S_MASK) + (sustainvar << S_OFFSET)
+    channelADSR := (channelADSR & R_MASK) + (releasevar << R_OFFSET)
+  
+\end{lstlisting}
+
+\hyperdef{}{LameAudio.spin-SetWaveform(waveformvar,volumevar)}{\paragraph{SetWaveform(waveformvar,
+volumevar)}\label{LameAudio.spin-SetWaveform(waveformvar,volumevar)}}
+
+\textbf{} ~Expand source
+
+\lstset{style=spin}
+\begin{lstlisting}
+PUB SetWaveform(waveformvar, volumevar)
+
+    channelADSR := (channelADSR & W_MASK) + (waveformvar << W_OFFSET)
+    channelparam := (channelparam & $FFFF00FF) + (volumevar << 8)
+\end{lstlisting}
+
+\hyperdef{}{LameAudio.spin-LoadInstr(instrnum)}{\paragraph{LoadInstr(instrnum)}\label{LameAudio.spin-LoadInstr(instrnum)}}
+
+\textbf{} ~Expand source
+
+\lstset{style=spin}
+\begin{lstlisting}
+PUB LoadInstr(instrnum)
+
+    channelADSR := LONG[@instruments][instrnum]
+  
+\end{lstlisting}
+
+\hyperdef{}{LameAudio.spin-PlaySound(channel,note)}{\paragraph{PlaySound(channel,
+note)}\label{LameAudio.spin-PlaySound(channel,note)}}
+
+\textbf{} ~Expand source
+
+\lstset{style=spin}
+\begin{lstlisting}
+PUB PlaySound(channel, note)
+
+    if note < 128 and channel < VOICES
+        oscindexer := channel << 2
+        oscRegister[oscindexer] &= !KEYBITS          
+        oscRegister[oscindexer+1] &= !ADSRBITS
+        oscRegister[oscindexer] := note + KEYBITS
+\end{lstlisting}
+
+\hyperdef{}{LameAudio.spin-StopSound(channel)}{\paragraph{StopSound(channel)}\label{LameAudio.spin-StopSound(channel)}}
+
+\textbf{} ~Expand source
+
+\lstset{style=spin}
+\begin{lstlisting}
+PUB StopSound(channel)
+
+    if channel < VOICES
+        oscindexer := channel << 2          
+        oscRegister[oscindexer] &= !KEYBITS 
+\end{lstlisting}
+
+\hyperdef{}{LameAudio.spin-StopAllSound}{\paragraph{StopAllSound}\label{LameAudio.spin-StopAllSound}}
+
+\textbf{} ~Expand source
+
+\lstset{style=spin}
+\begin{lstlisting}
+PUB StopAllSound
+
+    repeat oscindexer from 0 to OSCREGS-1 step REGPEROSC
+        oscRegister[oscindexer] &= !KEYBITS 
+\end{lstlisting}
+
+\hyperdef{}{LameAudio.spin-PlaySequence(songAddrvar)}{\paragraph{PlaySequence(songAddrvar)}\label{LameAudio.spin-PlaySequence(songAddrvar)}}
+
+\textbf{} ~Expand source
+
+\lstset{style=spin}
+\begin{lstlisting}
+PUB PlaySequence(songAddrvar)
+    seqcursor := 0
+    
+    repeat while byte[songAddrvar][seqcursor] <> ENDOFSONG
+        seqbyte := byte[songAddrvar][seqcursor]
+        if seqbyte == TIMEWAIT
+            repeatlong := byte[songAddrvar][seqcursor] << 13
+            repeat repeatseqindex from 0 to repeatlong
+            seqcursor += 2
+        
+        elseif seqbyte == NOTEON
+            PlaySound(byte[songAddrvar][seqcursor+1],byte[songAddrvar][seqcursor+2])   
+            seqcursor += 3
+        
+        elseif seqbyte == NOTEOFF
+            StopSound(byte[songAddrvar][seqcursor+1])
+            seqcursor += 2
+\end{lstlisting}
+
+\hyperdef{}{LameAudio.spin-LoadSong(songBarAddrvar)}{\paragraph{LoadSong(songBarAddrvar)}\label{LameAudio.spin-LoadSong(songBarAddrvar)}}
+
+\textbf{} ~Expand source
+
+\lstset{style=spin}
+\begin{lstlisting}
+PUB LoadSong(songBarAddrvar)
+
+    barAddr := songBarAddrvar
+    totalbars := byte[songBarAddrvar][0]
+    repeatlong := byte[songBarAddrvar][1] << 8
+    barres := byte[songBarAddrvar][2]
+    loopsongPtr := barAddr + totalbars*(barres+BYTES_BARHEADER) + BYTES_SONGHEADER        
+    
+    songcursor := 0
+    barcursor := 0
+\end{lstlisting}
+
+\hyperdef{}{LameAudio.spin-PlaySong}{\paragraph{PlaySong}\label{LameAudio.spin-PlaySong}}
+
+\textbf{} ~Expand source
+
+\lstset{style=spin}
+\begin{lstlisting}
+PUB PlaySong
+
+    play := 1
+\end{lstlisting}
+
+\hyperdef{}{LameAudio.spin-StopSong}{\paragraph{StopSong}\label{LameAudio.spin-StopSong}}
+
+\textbf{} ~Expand source
+
+\lstset{style=spin}
+\begin{lstlisting}
+PUB StopSong
+
+    play := 0
+    StopAllSound
+    
+\end{lstlisting}
+
+\hyperdef{}{LameAudio.spin-SongPlaying}{\paragraph{SongPlaying}\label{LameAudio.spin-SongPlaying}}
+
+This function returns whether a song is currently playing
+
+\textbf{} ~Expand source
+
+\lstset{style=spin}
+\begin{lstlisting}
+PUB SongPlaying
+    return play
+        
+\end{lstlisting}
+
+\hyperdef{}{LameAudio.spin-PrivateFunctions}{\subsection{Private
+Functions}\label{LameAudio.spin-PrivateFunctions}}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \hyperref[LameAudio.spin-FindLoopBarFromSongPointer]{FindLoopBarFromSongPointer}
+\item
+  \hyperref[LameAudio.spin-LoopingSongParser]{LoopingSongParser}
+\end{itemize}
+
+\hyperdef{}{LameAudio.spin-FindLoopBarFromSongPointer}{\paragraph{FindLoopBarFromSongPointer}\label{LameAudio.spin-FindLoopBarFromSongPointer}}
+
+This function increments the loop pointer by the value of the song
+pointr
+
+\textbf{} ~Expand source
+
+\lstset{style=spin}
+\begin{lstlisting}
+PRI FindLoopBarFromSongPointer
+
+    barinc := 0
+    barshift := 0
+    repeat while barinc < byte[loopsongPtr][songcursor]
+        barshift += barres+BYTES_BARHEADER
+        barinc++
+\end{lstlisting}
+
+\hyperdef{}{LameAudio.spin-LoopingSongParser}{\paragraph{LoopingSongParser}\label{LameAudio.spin-LoopingSongParser}}
+
+\textbf{} ~Expand source
+
+\lstset{style=spin}
+\begin{lstlisting}
+PRI LoopingSongParser
+
+    repeat
+
+        if play == 1
+            songcursor := 0
+               
+            ' iterate through song definition lines
+            repeat while byte[loopsongPtr][songcursor] <> SONGOFF and play == 1  
+                
+                barcursor := songcursor
+                
+                
+                ' iterate through loop definitions
+                repeat linecursor from 0 to (barres-1)
+                
+                    songcursor := barcursor
+
+                    ' play all notes defined in song definition
+                    repeat while byte[loopsongPtr][songcursor] <> BAROFF and play == 1  
+                        FindLoopBarFromSongPointer 
+                        
+                        bartmp := barshift+BYTES_SONGHEADER+BYTES_BARHEADER+linecursor
+                        
+                        if byte[barAddr][bartmp] == SNOP
+
+                        elseif byte[barAddr][bartmp] == SOFF
+                            StopSound( byte[barAddr][barshift+BYTES_SONGHEADER] )       
+                            
+                        else
+                            PlaySound( byte[barAddr][barshift+BYTES_SONGHEADER] , byte[barAddr][bartmp] )  'channel, note
+
+                            
+                        songcursor += 1
+                    
+                    repeat repeatindex from 0 to repeatlong
+                   
+                songcursor += 1
+
+            StopAllSound
+\end{lstlisting}

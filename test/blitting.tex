@@ -1,0 +1,90 @@
+\newpage
+\section{Blitting Operations}
+
+
+
+\subsection*{Screen Clear}
+
+This command arbitrarily clears the screen buffer to black and requires no parameters.  It does not access any memory additional to the buffer itself.
+
+\lstset{style=pasm}
+\begin{lstlisting}
+clearscreen1            mov     Addrtemp, destscrn
+                        mov     valutemp, fulscreen
+       
+:loop                   mov     datatemp, Addrtemp
+                        add     datatemp, frmflipcurrent
+                        wrword  zero, datatemp
+                        add     Addrtemp, #2
+                        djnz    valutemp, #:loop
+                        jmp     #loopexit
+\end{lstlisting}
+
+
+
+
+
+\subsection*{Screen Blit}
+
+This command copies a screen-sized memory block into the screen buffer.  It is the simplest form of blitting as no knowledge of the image's on-screen location is required; only knowledge that the source image is the same size as the destination buffer.
+
+\begin{lstlisting}
+blitscreen1             mov     Addrtemp, destscrn
+                        rdlong  Addrtemp2, sourceAddr
+                        mov     valutemp, fulscreen
+       
+:loop                   mov     datatemp, Addrtemp
+                        add     datatemp, frmflipcurrent
+           
+                        rdword  datatemp2, Addrtemp2
+                        wrword  datatemp2, datatemp
+                        add     Addrtemp, #2
+                        add     Addrtemp2, #2
+                        djnz    valutemp, #:loop
+                        jmp     #loopexit
+\end{lstlisting}
+
+
+
+
+
+\subsection*{Box Blit}
+
+This command copies a square image with a width of 8 pixels to the screen.  It is the simplest function for drawing tiled levels to the screen, as it requires only position and source data as an input.  However, vertical position is limited by the position problem, and care must be taken not to draw into inappropriate regions of memory, as memory corruption may occur.
+
+
+
+
+\subsection*{Sprite Blit}
+
+Sprite blit is a more sophisticated drawing routine that allows for arbitrary positioning on the screen, arbitrary image dimensions, and ensures images are not drawn outside the appropriate areas of the screen.  This additional functionality comes at a computational price, but efficiently use of resources can enable the user to create more dynamic games than otherwise.
+
+
+
+
+
+\subsection*{Masked Sprite Blit}
+
+This function takes sprite blitting one step further.  It allows the user to key out certain regions of an image that would otherwise be copied, allowing an image to be drawn seamlessly onto a backdrop, even if it is not of a rectangular shape.  This is a problem experienced by, for example, a ball sprite.  Without keying, the ball is drawn with its bounding box, appearing unsightly and out of place.  With keying, the ball is just another part of the scene.
+
+\begin{figure}[H]
+	\centering
+	
+		\begin{tabular} {c c | c}
+		Flip & Color & Mask bit \\
+		\hline
+		0 & 0 & 0 \\
+		0 & 1 & 0 \\
+		1 & 0 & 1 \\
+		1 & 1 & 0 \\
+		\end{tabular}
+		
+	\label{maskblittruthtable}
+	\caption{Truth Table}
+
+\end{figure}
+
+This operation is equivalent to Mask = Flip ANDN Color.
+
+
+\lstset{style=C++}

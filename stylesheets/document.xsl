@@ -315,6 +315,19 @@
   <xsl:template match="div[@id='main-header']"></xsl:template>
   <xsl:template match="span"></xsl:template>
   <xsl:template match="h1[@id='title-heading']"></xsl:template>
+  
+
+  <xsl:template match="div[@class='panel']">
+      <fo:block font-size="12pt" line-height="15pt"
+          background-color="#BFDFFF"
+          padding-left="10pt"
+          padding-right="10pt"
+          padding-top="10pt"
+          padding-bottom="10pt"
+          space-after="12pt" text-align="justify" >
+          <xsl:apply-templates select="*|text()"/>
+      </fo:block>
+  </xsl:template>
 
 
   <xsl:template match="a">
