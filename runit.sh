@@ -18,7 +18,7 @@ INPUT_SPACE="`zipinfo -1 "$1" *index.html`"
 
 INPUT_DIR="${HOME_DIR}/`dirname  $INPUT_SPACE`"
 
-rm -rf $INPUT_DIR
+#rm -rf $INPUT_DIR
 rm -rf $OUTPUT_DIR
 
 unzip "$1"
@@ -62,7 +62,7 @@ cat footer.tex >> output.tex
 #        -e 's/^[ \t]*$//e' -e '/./,/^$/!d' \
 
 # Run, rerun (build cross-references), display
-pdflatex output.tex ; pdflatex output.tex ; evince output.pdf 
+pdflatex output.tex ; pdflatex output.tex ; evince output.pdf &
  
 #cd ${INPUT_DIR}
 ##
