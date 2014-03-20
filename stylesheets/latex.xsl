@@ -30,7 +30,7 @@
     <!-- basic -->
     <xsl:template match="p">
         <xsl:apply-templates select="node()" />
-        <xsl:text>&#10;</xsl:text>
+        <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
     <xsl:template match="a">
         <xsl:apply-templates select="node()" />
@@ -112,6 +112,14 @@
 
     <!-- TOC? -->
     <xsl:template match="div[@class='toc-macro']">BLIKSJDFOF<xsl:apply-templates /></xsl:template>
+
+    <!-- Block quotes -->
+    <xsl:template match="blockquote">
+        <xsl:text>\begin{quote}</xsl:text>
+        <xsl:apply-templates select="node()" />
+        <xsl:text>\end{quote}</xsl:text>
+        <xsl:text>&#xa;&#xa;</xsl:text>
+    </xsl:template>
 
     <!-- Panel boxes -->
     <xsl:template match="div[@class='panelContent']"><xsl:apply-templates /></xsl:template>
