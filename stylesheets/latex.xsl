@@ -3,7 +3,16 @@
     version="1.0" 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+
+    <!-- Magic: http://stackoverflow.com/questions/5737862/xslt-output-formatting-removing-line-breaks-and-blank-output-lines-from-remove -->
     <xsl:output method="xml" indent="no" omit-xml-declaration="yes" />
+
+    <xsl:template match="*/text()[normalize-space()]">
+        <xsl:value-of select="normalize-space()"/>
+    </xsl:template>
+
+    <xsl:template match="*/text()[not(normalize-space())]" />
+
 
     <xsl:template match="html"><xsl:apply-templates /></xsl:template>
     <xsl:template match="head"><xsl:apply-templates /></xsl:template>
@@ -18,24 +27,23 @@
     <xsl:template match="th"><th><xsl:apply-templates /></th></xsl:template>
     <xsl:template match="td"><xsl:apply-templates /><xsl:text disable-output-escaping="yes"><![CDATA[ & ]]></xsl:text></xsl:template>
 
-
     <!-- basic -->
     <xsl:template match="p">
-        <xsl:apply-templates /><xsl:text>&#10;</xsl:text>
+        <xsl:apply-templates select="node()" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
-
     <xsl:template match="a">
-        <xsl:apply-templates />
+        <xsl:apply-templates select="node()" />
     </xsl:template>
-
-
-
     <xsl:template match="strong|b">
-        <xsl:text>\textbf{</xsl:text><xsl:apply-templates /><xsl:text>}</xsl:text>
+        <xsl:text> \textbf{</xsl:text>
+        <xsl:apply-templates select="node()" />
+        <xsl:text>} </xsl:text>
     </xsl:template>
-
     <xsl:template match="em|i">
-        <xsl:text>\textit{</xsl:text><xsl:apply-templates /><xsl:text>}</xsl:text>
+        <xsl:text> \textit{</xsl:text>
+        <xsl:apply-templates />
+        <xsl:text>} </xsl:text>
     </xsl:template>
 
 
@@ -73,17 +81,25 @@
     <!-- lists -->
     <xsl:template match="ol">
         <xsl:text>\begin{enumerate}</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
         <xsl:apply-templates />
         <xsl:text>\end{enumerate}</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:template>
 
     <xsl:template match="ul">
         <xsl:text>\begin{itemize}</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
         <xsl:apply-templates />
         <xsl:text>\end{itemize}</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="li">\item <xsl:apply-templates /></xsl:template>
+    <xsl:template match="li">
+        <xsl:text>  \item </xsl:text>
+        <xsl:apply-templates />
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:template>
 
 
 
@@ -94,12 +110,49 @@
         <xsl:apply-templates />
     </xsl:template>
 
+    <!-- TOC? -->
+    <xsl:template match="div[@class='toc-macro']">BLIKSJDFOF<xsl:apply-templates /></xsl:template>
+
+    <!-- Panel boxes -->
+    <xsl:template match="div[@class='panelContent']"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[@class='panel']">
+        <xsl:text>\begin{mdframed}[style=mystyle]</xsl:text>
+        <xsl:apply-templates />
+        <xsl:text>\end{mdframed}</xsl:text>
+    </xsl:template>
+
+    <!-- Code boxes -->
+    <xsl:template match="span[@class='expand-control-text']"></xsl:template>
+
+    <xsl:template match="div[@class='code panel pdl']"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[@class='codeHeader panelHeader pdl hide-border-bottom']"><xsl:apply-templates /></xsl:template>
+
+    <xsl:template match="div[@class='codeContent panelContent pdl hide-toolbar']/pre">
+        <xsl:text>\lstset{style=spin}
+            \begin{lstlisting}</xsl:text>
+        <xsl:copy-of select="text()" />
+        <xsl:text>\end{lstlisting}</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="div[@class='codeContent panelContent pdl']/pre">
+        <xsl:text>\lstset{style=spin}
+            \begin{lstlisting}</xsl:text>
+        <xsl:copy-of select="text()" />
+        <xsl:text>\end{lstlisting}</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="div[@class='codeContent panelContent pdl hide-toolbar']"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[@class='codeContent panelContent pdl']"><xsl:apply-templates /></xsl:template>
+
+
 
     <!-- Friendly box messages -->
     <!--    <xsl:template match="div"><xsl:apply-templates /></xsl:template> -->
     <xsl:template match="div[@class='aui-message problem shadowed information-macro']">
         <xsl:text>\begin{bclogo}[couleur=bgblue, arrondi =0, logo=\bcbombe, barre=none,noborder=true]{}</xsl:text>
-        <xsl:text>\itshape </xsl:text><xsl:apply-templates />
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>\itshape </xsl:text>
+        <xsl:apply-templates select="node()" />
         <xsl:text>\end{bclogo}</xsl:text>
     </xsl:template>
     <xsl:template match="div[@class='aui-message problem shadowed information-macro']/span"></xsl:template>
@@ -107,7 +160,9 @@
 
     <xsl:template match="div[@class='aui-message warning shadowed information-macro']">
         <xsl:text>\begin{bclogo}[couleur=bgblue, arrondi =0, logo=\bcbombe, barre=none,noborder=true]{}</xsl:text>
-        <xsl:text>\itshape </xsl:text><xsl:apply-templates />
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>\itshape </xsl:text>
+        <xsl:apply-templates select="node()" />
         <xsl:text>\end{bclogo}</xsl:text>
     </xsl:template>
     <xsl:template match="div[@class='aui-message warning shadowed information-macro']/span"></xsl:template>
@@ -115,7 +170,9 @@
 
     <xsl:template match="div[@class='aui-message hint shadowed information-macro']">
         <xsl:text>\begin{bclogo}[couleur=bgblue, arrondi =0, logo=\bcbombe, barre=none,noborder=true]{}</xsl:text>
-        <xsl:text>\itshape</xsl:text><xsl:apply-templates />
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>\itshape</xsl:text>
+        <xsl:apply-templates select="node()" />
         <xsl:text>\end{bclogo}</xsl:text>
     </xsl:template>
     <xsl:template match="div[@class='aui-message hint shadowed information-macro']/span"></xsl:template>
@@ -123,7 +180,9 @@
 
     <xsl:template match="div[@class='aui-message success shadowed information-macro']">
         <xsl:text>\begin{bclogo}[couleur=bgblue, arrondi =0, logo=\bcbombe, barre=none,noborder=true]{}</xsl:text>
-        <xsl:text>\itshape</xsl:text><xsl:apply-templates />
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>\itshape</xsl:text>
+        <xsl:apply-templates select="node()" />
         <xsl:text>\end{bclogo}</xsl:text>
     </xsl:template>
     <xsl:template match="div[@class='aui-message success shadowed information-macro']/span"></xsl:template>
@@ -135,19 +194,37 @@
 
     <xsl:template match="h1">
         <xsl:choose>
+            <xsl:when test="count(ancestor::book_section) = 0">
+                <xsl:text>\newpage
+\AddToShipoutPicture*{\ChapterBackgroundPic}
+\part{</xsl:text>
+                <xsl:apply-templates select="node()" />
+                <xsl:text>}
+                    \newpage
+                </xsl:text>
+                <xsl:text>&#xa;</xsl:text>
+            </xsl:when>
             <xsl:when test="count(ancestor::book_section) = 1">
-                <xsl:text>\AddToShipoutPicture*{\ChapterBackgroundPic}
-                \clearpage
-                \part{</xsl:text><xsl:value-of select="text()"/><xsl:text>}</xsl:text>
+                <xsl:text>\newpage
+\AddToShipoutPicture*{\ChapterBackgroundPic}
+\chapter{</xsl:text>
+                <xsl:apply-templates select="node()" />
+                <xsl:text>}
+\newpage
+                </xsl:text>
+                <xsl:text>&#xa;</xsl:text>
             </xsl:when>
             <xsl:when test="count(ancestor::book_section) = 2">
-                <xsl:text>\chapter{</xsl:text><xsl:value-of select="text()"/><xsl:text>}</xsl:text>
+                <xsl:text>\section{</xsl:text>
+                <xsl:apply-templates select="node()" />
+                <xsl:text>}</xsl:text>
+                <xsl:text>&#xa;</xsl:text>
             </xsl:when>
             <xsl:when test="count(ancestor::book_section) = 3">
-                <xsl:text>\section{</xsl:text><xsl:value-of select="text()"/><xsl:text>}</xsl:text>
-            </xsl:when>
-            <xsl:when test="count(ancestor::book_section) = 4">
-                <xsl:text>\subsection{</xsl:text><xsl:value-of select="text()"/><xsl:text>}</xsl:text>
+                <xsl:text>\subsection{</xsl:text>
+                <xsl:apply-templates select="node()" />
+                <xsl:text>}</xsl:text>
+                <xsl:text>&#xa;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 EVERYTHING SUCKS<xsl:apply-templates />
@@ -155,12 +232,28 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="h2|h3|h4|h5">
-        \subsubsection{<xsl:apply-templates />}
+    <xsl:template match="h2|h3">
+        <xsl:text>\subsection{</xsl:text>
+        <xsl:apply-templates select="node()" />
+        <xsl:text>}</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
     </xsl:template>
 
+    <xsl:template match="h4|h5">
+        <xsl:text>\subsubsection{</xsl:text>
+        <xsl:apply-templates select="node()" />
+        <xsl:text>}</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:template>
 
-    <xsl:template match="span"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="span">
+        <xsl:apply-templates select="node()" />
+    </xsl:template>
+    <xsl:template match="div[not(@*)]">
+        <xsl:apply-templates select="node()" />
+    </xsl:template>
+    <xsl:template match="br"></xsl:template>
+    <xsl:template match="style"></xsl:template>
 
 
     <xsl:template match="@*|node()">

@@ -18,11 +18,11 @@ INPUT_SPACE="`zipinfo -1 "$1" *index.html`"
 
 INPUT_DIR="${HOME_DIR}/`dirname  $INPUT_SPACE`"
 
-#rm -rf $INPUT_DIR
-#rm -rf $OUTPUT_DIR
-#
-#unzip "$1"
-#mkdir -p $OUTPUT_DIR
+rm -rf $INPUT_DIR
+rm -rf $OUTPUT_DIR
+
+unzip "$1"
+mkdir -p $OUTPUT_DIR
 
 cd $INPUT_DIR
 
@@ -51,15 +51,15 @@ cd ${HOME_DIR}
 # Convert master page to LaTeX, and combine with formatting rules
 cp -f header.tex output.tex 
 cat ${OUTPUT_DOC} | tidy -xml -indent -utf8 > ${OUTPUT_DOC}2
-xsltproc ${STYLE_DIR}/latex.xsl ${OUTPUT_DOC}2 | sed -e 's/^[ \t]*//g' \
-        -e 's/\$/\\$/g' -e 's/&/\\\&/g' >> output.tex # Make sure to clean up special characters for latex
+xsltproc ${STYLE_DIR}/latex.xsl ${OUTPUT_DOC}2 | sed \
+        -e 's/\$/\\$/g' -e 's/&/\\\&/g' \
+        -e 's/[ \t]*\././g' -e 's/[ \t]*\,/,/g' \
+        >> output.tex # Make sure to clean up special characters for latex
 cat footer.tex >> output.tex
 
-#pandoc -f html -t latex --chapters ${OUTPUT_DOC} >> output.tex 
-#sed -i -e 's/longtable/table/g' output.tex
-#sed -i -e '/noalign/ d' output.tex
-#sed -i -e 's/includegraphics/&[scale=0.25,resolution=300]/g' output.tex
 
+#vi output.tex
+#        -e 's/^[ \t]*$//e' -e '/./,/^$/!d' \
 
 # Run, rerun (build cross-references), display
 pdflatex output.tex ; pdflatex output.tex ; evince output.pdf 
