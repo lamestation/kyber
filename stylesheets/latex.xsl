@@ -47,16 +47,18 @@
         <xsl:apply-templates />
         <xsl:text>} </xsl:text>
     </xsl:template>
+    <xsl:template match="code">
+        <xsl:text> \texttt{</xsl:text>
+        <xsl:apply-templates />
+        <xsl:text>} </xsl:text>
+    </xsl:template>
 
 
     <!-- images -->
     <xsl:template match="table[@class='gliffy-macro-table']/tr/td/table[@class='gliffy-macro-inner-table']/tr/td/img[@class='gliffy-macro-image']">
-        <xsl:text>\begin{figure}[H]
-\centering
-\includegraphics[scale=0.3]{</xsl:text>
-        <xsl:value-of select="@src" /><xsl:text>}\\
-\end{figure}
-        </xsl:text>
+        <xsl:text>  \includegraphics[width = 3.5in]{</xsl:text>
+        <xsl:value-of select="@src" />
+        <xsl:text>}&#xa;</xsl:text>
     </xsl:template>
 
     <xsl:template match="table[@class='gliffy-macro-table']/tr/td/table[@class='gliffy-macro-inner-table']/caption"></xsl:template>
@@ -70,12 +72,26 @@
 
 
     <xsl:template match="img">
-        <xsl:text>\begin{figure}[H]
-\centering
-\includegraphics[width = 2.5in]{</xsl:text>
-        <xsl:value-of select="@src" /><xsl:text>}\\
-\end{figure}
-        </xsl:text>
+        <xsl:text>\begin{figure}&#xa;</xsl:text>
+        <xsl:text>  \centering&#xa;</xsl:text>
+        <xsl:choose>
+            <xsl:when test="@width">
+                <xsl:text>  \includegraphics[width = </xsl:text>
+                <xsl:value-of select="number(@width) div 2" />
+                <xsl:text>px]{</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>  \includegraphics[width = 3in]{</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:value-of select="@src" />
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:if test="@title">
+            <xsl:text>  \caption{</xsl:text>
+            <xsl:value-of select="@title" />
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:text>\end{figure}&#xa;</xsl:text>
     </xsl:template>
 
 
@@ -118,11 +134,18 @@
     <!-- TOC? -->
     <xsl:template match="div[@class='toc-macro']">BLIKSJDFOF<xsl:apply-templates /></xsl:template>
 
-    <!-- LaTeX hack -->
+    <!-- LaTeX hacks -->
     <xsl:template match="div[@class='latex']">
         <xsl:text>\[&#xa;</xsl:text>
         <xsl:apply-templates select="node()" />
         <xsl:text>&#xa;\]&#xa;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="div[@class='figure']">
+        <xsl:text>&#xa;\begin{figure}&#xa;</xsl:text>
+        <xsl:text>\centering&#xa;</xsl:text>
+        <xsl:apply-templates select="node()" />
+        <xsl:text>\end{figure}&#xa;</xsl:text>
     </xsl:template>
 
     <!-- Block quotes -->
@@ -161,6 +184,22 @@
 
     <xsl:template match="div[@class='codeContent panelContent pdl hide-toolbar']"><xsl:apply-templates /></xsl:template>
     <xsl:template match="div[@class='codeContent panelContent pdl']"><xsl:apply-templates /></xsl:template>
+
+    <!-- Custom code boxes -->
+    <xsl:template match="pre[@class='spin']"><xsl:apply-templates select="node()" /></xsl:template>
+    <xsl:template match="pre[@class='pasm']"><xsl:apply-templates select="node()" /></xsl:template>
+
+    <xsl:template match="pre[@class='spin']/pre">
+        <xsl:text>\lstset{style=spin}&#xa;\begin{lstlisting}</xsl:text>
+        <xsl:copy-of select="text()" />
+        <xsl:text>\end{lstlisting}&#xa;&#xa;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="pre[@class='pasm']/pre">
+        <xsl:text>\lstset{style=pasm}&#xa;\begin{lstlisting}</xsl:text>
+        <xsl:copy-of select="text()" />
+        <xsl:text>\end{lstlisting}&#xa;&#xa;</xsl:text>
+    </xsl:template>
 
 
 
