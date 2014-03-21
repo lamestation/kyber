@@ -51,15 +51,12 @@ Make sure you have Python, xsltproc, and LaTeX installed.
 
 ## To Do
 
- * Figure out how figures, need to strip out extra file garbage like before.
- * Need to format the info boxes properly.
- * Need to ensure images always fit within page
- * Need to change verbatim output of pandoc to listing
- * Need to create user macros to allow formatting of cool things.
- * Fix table output
  * Fix graphics inclusion (wtf does confluence do)
- * Properly escape ampersand then convert it back to real character before running to latex
- * Need to make sure no divs or brs get through
- * Need to find away to clean up all the white space being created
- * Need to properly concatenate subsubsection so that newlines are not added.
- * Need to migrate to makefile so that there is strict error checking on build (currently there is **NO** error checking at all)
+ * Migrate build to makefile for strict error checking on build
+ * Add support for intelligent image handling to XSL stylesheet
+ * Add subfigure support (multiple images with top-level caption)
+ * Add table support
+ * Add link support
+ * Make latex prefer to line break at white space
+ * Make boxes prefer to not line break at all
+ * Fix LaTeX math equations so they don't error out
