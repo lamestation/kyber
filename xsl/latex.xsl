@@ -37,7 +37,7 @@
 
     <xsl:template match="html"><xsl:apply-templates /></xsl:template>
     <xsl:template match="head"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="title"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="title"></xsl:template>
     <xsl:template match="body"><xsl:apply-templates /></xsl:template>
 
 

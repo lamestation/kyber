@@ -1,10 +1,9 @@
 HOME_DIR=$(shell pwd)
-OUTPUT_DIR=$(HOME_DIR)/output
 STYLE_DIR=$(HOME_DIR)/xsl
 SED_DIR=$(HOME_DIR)/sed
 TEX_DIR=$(HOME_DIR)/tex
 
-INTER_XML=$(OUTPUT_DIR)/final.xml
+INTER_XML=$(INPUT_DIR)/final.xml
 
 OUTPUT_NAME=output
 OUTPUT_FILENAME=$(HOME_DIR)/$(OUTPUT_NAME)
@@ -39,9 +38,7 @@ validate_space:
 # Clean up old crap and 
 open_archive:
 	rm -rf $(INPUT_DIR)
-	rm -rf $(OUTPUT_DIR)
 	unzip $(SPACE)
-	mkdir -p $(OUTPUT_DIR)
 
 # Prepare weird Confluence XHTML to be consumed by normal parser
 prepare_html:
@@ -51,17 +48,13 @@ prepare_html:
 	do \
 		echo $(INPUT_DIR)/$$f ; \
 		../page.py $(INPUT_DIR)/$$f ; \
-		sed -i -e '/<META/d' $(INPUT_DIR)/$$f ; \
-		sed -i -e 's/&nbsp;//g' $(INPUT_DIR)/$$f ; \
-		tidy -asxml -o $(OUTPUT_DIR)/$$f -numeric --force-output yes $(INPUT_DIR)/$$f 2>/dev/null; \
-		cp -f $(INPUT_DIR)/$$f $(OUTPUT_DIR)/$$f ; \
+		sed -f $(SED_DIR)/input.sed -i $(INPUT_DIR)/$$f ; \
 	done
-	cp -ur $(INPUT_DIR)/attachments $(OUTPUT_DIR)
 	cp -ur $(INPUT_DIR)/attachments $(HOME_DIR)
 
 # Build single master page using space index page.
 assemble_document:
-	java net.sf.saxon.Transform -xsl:$(STYLE_DIR)/index.xsl -s:$(OUTPUT_DIR)/index.html > $(INTER_XML)
+	java net.sf.saxon.Transform -xsl:$(STYLE_DIR)/index.xsl -s:$(INPUT_DIR)/index.html > $(INTER_XML)
 
 # Convert master page to LaTeX, and combine with formatting rules
 build_latex:
@@ -75,7 +68,7 @@ build_latex:
 
 # No longer supported
 build_xslfo:
-	fop -xml $(INTER_XML) -xsl $(STYLE_DIR)/document.xsl -foout $(OUTPUT_DIR)/$(OUTPUT_NAME).fo
+	fop -xml $(INTER_XML) -xsl $(STYLE_DIR)/document.xsl -foout $(INPUT_DIR)/$(OUTPUT_NAME).fo
 
 # Run, rerun (build cross-references), display
 # If it works the first time, it will work the second time.
@@ -84,3 +77,10 @@ build_pdf:
 
 
 
+clean:
+	rm -f $(OUTPUT_FILENAME).aux
+	rm -f $(OUTPUT_FILENAME).tex
+	rm -f $(OUTPUT_FILENAME).log
+	rm -f $(OUTPUT_FILENAME).out
+	rm -f $(OUTPUT_FILENAME).toc
+	rm -f $(OUTPUT_FILENAME).pdf

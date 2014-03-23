@@ -53,7 +53,7 @@
 
     <xsl:template match="ul/li/a">
         <xsl:variable name="pageLink" select="@href"/>
-        <xsl:variable name="pageName" select=".|text()"/>
+        <xsl:variable name="pageName" select="text()"/>
         <h1><xsl:value-of select="$pageName" /></h1>
         <xsl:copy-of select="document($pageLink)//div[@id='main-content']" />
     </xsl:template>
