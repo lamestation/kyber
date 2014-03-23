@@ -12,6 +12,7 @@ But what does it do?
 * Customizable with the full power of LaTeX
 * Full UTF-8 and internationization support throughout
 * Intelligent image scaling built into the environment
+* Uses the Saxon parser for full XSLT 2.0 support
 
 Like the mountain pass that connected much of the ancient world, Kyber is
 the link between your project and your wiki, keeping them connected and
@@ -24,7 +25,7 @@ mutually up-to-date.
 On Ubuntu, installation is easy. Install any needed dependencies first, probably:
 
     # XHTML
-    sudo apt-get install xsltproc libxml2-utils tidy
+    sudo apt-get install xsltproc libxml2-utils tidy libsaxonb-java
 
     # LaTeX
     sudo apt-get install texlive-latex-base texlive-latex-extra
