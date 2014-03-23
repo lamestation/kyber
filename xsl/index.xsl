@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <xsl:transform
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    version="1.0">
+    version="2.0">
 
     <xsl:output method="xml"/>
 
@@ -22,7 +22,7 @@
 
     <xsl:template match="title">
         <title>
-            <xsl:variable name="mainTitle" select=".|text()"/>
+            <xsl:value-of select=".|text()"/>
         </title>
     </xsl:template>
     

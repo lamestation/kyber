@@ -61,7 +61,7 @@ prepare_html:
 
 # Build single master page using space index page.
 assemble_document:
-	xsltproc $(STYLE_DIR)/index.xsl $(OUTPUT_DIR)/index.html > $(INTER_XML)
+	java net.sf.saxon.Transform -xsl:$(STYLE_DIR)/index.xsl -s:$(OUTPUT_DIR)/index.html > $(INTER_XML)
 
 # Convert master page to LaTeX, and combine with formatting rules
 build_latex:

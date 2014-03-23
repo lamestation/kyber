@@ -13,6 +13,7 @@ But what does it do?
 * Full UTF-8 and internationization support throughout
 * Intelligent image scaling built into the environment
 * Uses the Saxon parser for full XSLT 2.0 support
+* Use make for strict error checking on build
 
 Like the mountain pass that connected much of the ancient world, Kyber is
 the link between your project and your wiki, keeping them connected and
@@ -48,16 +49,14 @@ Watch as your space is rendered in glorious PDF.
 
 The conversion is done in three separate stages: document assembly, XSL conversion to LaTeX, LaTeX compilation to PDF.
 
-Make sure you have Python, xsltproc, and LaTeX installed.
+Make sure you have Python, xsltproc, Saxon, and LaTeX installed.
 
 ## To Do
 
  * Fix graphics inclusion (wtf does confluence do)
- * Migrate build to makefile for strict error checking on build
  * Add support for intelligent image handling to XSL stylesheet
  * Add subfigure support (multiple images with top-level caption)
  * Add table support
  * Add link support
  * Make latex prefer to line break at white space
  * Make boxes prefer to not line break at all
- * Fix LaTeX math equations so they don't error out
