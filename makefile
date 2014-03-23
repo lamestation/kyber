@@ -1,7 +1,8 @@
 HOME_DIR=$(shell pwd)
 OUTPUT_DIR=$(HOME_DIR)/output
-STYLE_DIR=$(HOME_DIR)/stylesheets
-CONFIG_DIR=$(HOME_DIR)
+STYLE_DIR=$(HOME_DIR)/xsl
+SED_DIR=$(HOME_DIR)/sed
+TEX_DIR=$(HOME_DIR)/tex
 
 INTER_XML=$(OUTPUT_DIR)/final.xml
 
@@ -62,12 +63,12 @@ assemble_document:
 
 # Convert master page to LaTeX, and combine with formatting rules
 build_latex:
-	cp -f header.tex $(OUTPUT_TEX)
+	cp -f $(TEX_DIR)/header.tex $(OUTPUT_TEX)
 	cat $(INTER_XML) \
 		| tidy -xml -indent -utf8 > $(INTER_XML)2
 	java net.sf.saxon.Transform -xsl:$(STYLE_DIR)/latex.xsl -s:$(INTER_XML)2 \
-    	| sed -f filter.sed >> $(OUTPUT_TEX)
-	cat footer.tex >> $(OUTPUT_TEX)
+    	| sed -f $(SED_DIR)/output.sed >> $(OUTPUT_TEX)
+	cat $(TEX_DIR)/footer.tex >> $(OUTPUT_TEX)
 
 # No longer supported
 build_xslfo:
