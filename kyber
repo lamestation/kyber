@@ -4,6 +4,9 @@ import os, sys, re
 import argparse
 import subprocess
 
+HOMEDIR=os.path.dirname(os.path.realpath(__file__))
+MAKEFILE=os.path.join(HOMEDIR,"main.mk")
+
 
 parser = argparse.ArgumentParser(description='Generate NICE PDFs from Confluence exports.')
 
@@ -12,7 +15,7 @@ parser.add_argument('filename', metavar='FILE', nargs=1, help='Confluence HTML e
 args = parser.parse_args()
 
 if args.filename:
-    subprocess.call(["make", "SPACE="+args.filename[0]])
+    subprocess.call(["make", "-f", MAKEFILE, "SPACE="+args.filename[0]])
 else:
     print "I kind of need a filename, thanks"
     sys.exit()
