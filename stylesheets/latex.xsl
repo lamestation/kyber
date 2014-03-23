@@ -2,6 +2,7 @@
 <xsl:stylesheet 
     version="1.0" 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
     <xsl:output method="xml" indent="no" omit-xml-declaration="yes" />
 
     <!-- Normalize white space through document -->
@@ -14,6 +15,22 @@
     </xsl:template>
 
     <xsl:template match="*/text()[not(normalize-space())]" />
+
+
+
+    <!-- Character escaping -->
+    <!--
+    <xsl:template match=
+        "contains('|code|',
+        concat('|', name(), '|'))
+        ">
+        -->
+    <xsl:template match="a">
+        <xsl:variable name="step1" select="replace(text(),'_','\\_')"/>
+        <xsl:variable name="step2" select="replace($step1,'&amp;','\\&amp;')"/>
+        <xsl:value-of select="replace($step2,'#','\\#')"/>
+    </xsl:template>
+
 
 
     <!-- Open up document -->
@@ -31,7 +48,12 @@
     <xsl:template match="table"></xsl:template>
     <xsl:template match="tr"><tr><xsl:apply-templates /></tr></xsl:template>
     <xsl:template match="th"><th><xsl:apply-templates /></th></xsl:template>
-    <xsl:template match="td"><xsl:apply-templates /><xsl:text disable-output-escaping="yes"><![CDATA[ & ]]></xsl:text></xsl:template>
+
+    <!--
+    <xsl:template match="td"><xsl:apply-templates />
+        <xsl:text disable-output-escaping="yes"><![CDATA[ & ]]></xsl:text>
+    </xsl:template>
+    -->
 
     <!-- Basic -->
 
@@ -39,9 +61,10 @@
         <xsl:apply-templates select="node()" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
-    <xsl:template match="a">
+    <!--    <xsl:template match="a">
         <xsl:apply-templates select="node()" />
     </xsl:template>
+    -->
     <xsl:template match="strong|b">
         <xsl:text> \textbf{</xsl:text>
         <xsl:apply-templates select="node()" />
@@ -149,10 +172,13 @@
 
     <!-- LaTeX Features -->
 
-    <xsl:template match="div[@class='latex']">
-        <xsl:text>\[&#xa;</xsl:text>
+    <xsl:template match="pre[@class='latex']">
+        <xsl:text>\[ </xsl:text>
         <xsl:apply-templates select="node()" />
-        <xsl:text>&#xa;\]&#xa;</xsl:text>
+        <xsl:text> \]&#xa;</xsl:text>
+    </xsl:template>
+    <xsl:template match="pre[@class='latex']/p">
+        <xsl:apply-templates select="node()" />
     </xsl:template>
 
     <xsl:template match="div[@class='figure']">
@@ -331,5 +357,6 @@
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
+
 
 </xsl:stylesheet>
