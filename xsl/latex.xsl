@@ -43,17 +43,68 @@
 
     <!-- Tables -->
 
-    <xsl:template match="div[@class='table-wrap']"><xsl:apply-templates /></xsl:template>
-    <!--<xsl:template match="table"><table><xsl:apply-templates /></table></xsl:template> -->
-    <xsl:template match="table"></xsl:template>
-    <xsl:template match="tr"><tr><xsl:apply-templates /></tr></xsl:template>
-    <xsl:template match="th"><th><xsl:apply-templates /></th></xsl:template>
-
-    <!--
-    <xsl:template match="td"><xsl:apply-templates />
-        <xsl:text disable-output-escaping="yes"><![CDATA[ & ]]></xsl:text>
+    <xsl:template match="div[@class='table-wrap']">
+        <xsl:text>\begin{table}&#10;</xsl:text>
+        <xsl:apply-templates select="node()" />
+        <xsl:text>\end{table}&#10;</xsl:text>
     </xsl:template>
-    -->
+    <!--<xsl:template match="table"><table><xsl:apply-templates /></table></xsl:template> -->
+
+    <xsl:template match="table[@class='confluenceTable']/tbody">
+        <xsl:text>\begin{tabularx}{\linewidth}{ X X l X X X X }&#10;</xsl:text>
+        <xsl:text>\hline&#10;</xsl:text>
+        <xsl:apply-templates select="node()" />
+        <xsl:text>\end{tabularx}&#10;</xsl:text>
+    </xsl:template>
+    <xsl:template match="table[@class='confluenceTable']">
+        <xsl:apply-templates select="node()" />
+    </xsl:template>
+
+
+    <xsl:template match="tr">
+        <xsl:apply-templates select="node()" />
+        <xsl:text>\hline&#10;</xsl:text>
+    </xsl:template>
+
+    <!-- get rid of table images for now -->
+    <xsl:template match="td//img|th//img" />
+
+    <!-- Table cells -->
+    <xsl:template match="td|th">
+
+        <!-- Check if multicolumn -->
+        <xsl:choose>
+            <xsl:when test="@colspan and @colspan &gt; 1">
+                <xsl:text>\multicolumn{</xsl:text>
+                <xsl:value-of select="@colspan" />
+                <xsl:text>}{l}{</xsl:text>
+                <xsl:apply-templates select="node()" />
+                <xsl:text>} </xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="node()" />
+            </xsl:otherwise>
+        </xsl:choose>
+
+        <!-- Check if last element in table -->
+        <xsl:choose>
+            <xsl:when test="not(following-sibling::td|following-sibling::th)">
+                <xsl:text> \\&#10;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text disable-output-escaping="yes"><![CDATA[ & ]]></xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+
+    </xsl:template>
+
+    <!-- Remove headers from tables -->
+    <xsl:template match="th//h1|th//h2|th//h3|th//h4|th//h5">
+        <xsl:apply-templates select="node()" />
+    </xsl:template>
+    <xsl:template match="td//h1|td//h2|td//h3|td//h4|td//h5">
+        <xsl:apply-templates select="node()" />
+    </xsl:template>
 
     <!-- Basic -->
 
@@ -72,6 +123,16 @@
     </xsl:template>
     <xsl:template match="em|i">
         <xsl:text> \textit{</xsl:text>
+        <xsl:apply-templates />
+        <xsl:text>} </xsl:text>
+    </xsl:template>
+    <xsl:template match="sub">
+        <xsl:text> \textsubscript{</xsl:text>
+        <xsl:apply-templates />
+        <xsl:text>} </xsl:text>
+    </xsl:template>
+    <xsl:template match="sup">
+        <xsl:text>\textsuperscript{</xsl:text>
         <xsl:apply-templates />
         <xsl:text>} </xsl:text>
     </xsl:template>
@@ -103,7 +164,7 @@
     <!-- Images -->
 
     <xsl:template match="img">
-        <xsl:text>\begin{figure}&#xa;</xsl:text>
+        <xsl:text>\begin{figure}[!htb]&#xa;</xsl:text>
         <xsl:text>  \centering&#xa;</xsl:text>
         <xsl:choose>
             <xsl:when test="@width">
@@ -182,7 +243,7 @@
     </xsl:template>
 
     <xsl:template match="div[@class='figure']">
-        <xsl:text>&#xa;\begin{figure}&#xa;</xsl:text>
+        <xsl:text>&#xa;\begin{figure}[!htb]&#xa;</xsl:text>
         <xsl:text>\centering&#xa;</xsl:text>
         <xsl:apply-templates select="node()" />
         <xsl:text>\end{figure}&#xa;</xsl:text>
