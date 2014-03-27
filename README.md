@@ -53,10 +53,15 @@ Make sure you have Python, xsltproc, Saxon, and LaTeX installed.
 
 ## To Do
 
- * Fix graphics inclusion (wtf does confluence do)
- * Add support for intelligent image handling to XSL stylesheet
  * Add subfigure support (multiple images with top-level caption)
- * Add table support
- * Add link support
  * Make latex prefer to line break at white space
  * Make boxes prefer to not line break at all
+ * Fix table support to adjust for varying column widths
+ * Create image rotating algorithm and define expectations for image size
+ * Figure out scheme for adding glossary
+ * Add good formatting for highlight boxes
+ * Verify handling of special characters in all cases
+ * Create test confluence space that will thoroughly vet possible formatting
+ * Scheme up decent interface for customizing look/feel
+ * Add automatic header demotion
+ * Need a good way to escape _, #, $, and &.
