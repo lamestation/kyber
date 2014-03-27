@@ -8,3 +8,5 @@ output.tex
 *.out
 *.toc
 *.idx
+*.ilg
+*.ind
