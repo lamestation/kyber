@@ -7,6 +7,7 @@
 
 
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{verbatim}
 \usepackage{graphicx}
 
@@ -63,11 +64,11 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
-\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{#1}}{}}
-\renewcommand{\sectionmark}[1]{\markright{\MakeUppercase{#1}}{}}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{#1}{}}
 
-\fancyhead[LE]{\textbf{\thepage}   \textit{\nouppercase{\leftmark}}}
-\fancyhead[RO]{\textit{\nouppercase{\rightmark}}   \textbf{\thepage}}
+\fancyhead[LE]{\color{darkgray}{\textbf{\thepage}} \color{lightgray}{$\blacksquare$} \color{darkgray}{\textsc{\leftmark}}}
+\fancyhead[RO]{\color{darkgray}{\textsc{\rightmark}} \color{lightgray}{$\blacksquare$} \color{darkgray}{\textbf{\thepage}}}
 
 	
 
@@ -100,6 +101,7 @@
 \definecolor{gray}{HTML}{BCBCBC}
 \definecolor{darkgray}{HTML}{787878}
 \definecolor{darkestgray}{HTML}{555555}
+\definecolor{black}{HTML}{000000}
 
 
 
