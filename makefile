@@ -18,7 +18,7 @@ INPUT_DIR=$(HOME_DIR)/$(dir $(INPUT_SPACE))
 export CLASSPATH=/usr/share/java/saxonb.jar
 
 
-all: validate_space open_archive prepare_html assemble_document build_latex build_pdf view_pdf
+all: view_pdf
 	@echo $(SPACE)
 	@echo $(INPUT_SPACE)
 	@echo $(INPUT_DIR)
@@ -37,12 +37,12 @@ validate_space:
 	fi \
 
 # Clean up old crap and 
-open_archive:
+open_archive: validate_space
 	rm -rf $(INPUT_DIR)
 	unzip $(SPACE)
 
 # Prepare weird Confluence XHTML to be consumed by normal parser
-prepare_html:
+prepare_html: open_archive
 	@echo $(INPUT_DIR)
 	cd $(INPUT_DIR) ; \
 	for f in *.html ; \
@@ -54,11 +54,11 @@ prepare_html:
 	cp -ur $(INPUT_DIR)/attachments $(HOME_DIR)
 
 # Build single master page using space index page.
-assemble_document:
+assemble_document: prepare_html
 	java net.sf.saxon.Transform -xsl:$(STYLE_DIR)/index.xsl -s:$(INPUT_DIR)/index.html > $(INTER_XML)
 
 # Convert master page to LaTeX, and combine with formatting rules
-build_latex:
+build_latex: assemble_document
 	cp -f $(TEX_DIR)/header.tex $(OUTPUT_TEX)
 	cat $(INTER_XML) \
 		| tidy -xml -indent -utf8 > $(INTER_XML)2
@@ -73,12 +73,12 @@ build_xslfo:
 
 # Run, rerun (build cross-references), display
 # If it works the first time, it will work the second time.
-build_pdf:
+build_pdf: build_latex
 	pdflatex -halt-on-error $(OUTPUT_TEX)
 	cd $(HOME_DIR) ; makeindex $(OUTPUT_IDX)
 	pdflatex -halt-on-error $(OUTPUT_TEX)
 
-view_pdf:
+view_pdf: build_pdf
 	evince $(OUTPUT_PDF)
 
 
