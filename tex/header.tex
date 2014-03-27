@@ -23,7 +23,6 @@
 
 
 
-
 %set margins
 %set paper dimensions
 \usepackage[paperwidth=5.5in, paperheight=8.5in]{geometry}
@@ -43,6 +42,18 @@
 
 
 
+
+%CONSOLE TITLE
+\definecolor{lightblue}{rgb}{0.85,1,1} 
+\definecolor{lightgreen}{rgb}{0.8,1,0.9} 
+\definecolor{darkblue}{rgb}{0,0,0.5} 
+\definecolor{darkred}{rgb}{0.6,0,0} 
+
+\definecolor{bgblue}{RGB}{245,243,253}
+\definecolor{ttblue}{RGB}{91,194,224}
+ 
+
+
 %set header and footer
 \usepackage{fancyhdr}
 \setlength{\headheight}{15pt}
@@ -59,17 +70,6 @@
 \fancyhead[RO]{\textit{\nouppercase{\rightmark}}   \textbf{\thepage}}
 
 	
-
-%CONSOLE TITLE
-\definecolor{lightblue}{rgb}{0.85,1,1} 
-\definecolor{lightgreen}{rgb}{0.8,1,0.9} 
-\definecolor{darkblue}{rgb}{0,0,0.5} 
-\definecolor{darkred}{rgb}{0.6,0,0} 
-
-\definecolor{bgblue}{RGB}{245,243,253}
-\definecolor{ttblue}{RGB}{91,194,224}
- 
-
 
 \input{tex/languages.tex}
 
@@ -90,9 +90,8 @@
 % table support
 \usepackage{ltablex}
 
-
-\usepackage{makeidx}
-\makeindex
+\usepackage{imakeidx}
+\makeindex[intoc]
 
 % Set up colors
 \definecolor{lightblue}{HTML}{007FFF}
