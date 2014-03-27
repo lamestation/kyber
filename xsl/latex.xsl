@@ -136,12 +136,21 @@
         <xsl:apply-templates />
         <xsl:text>} </xsl:text>
     </xsl:template>
+    <!--
     <xsl:template match="code">
         <xsl:text> \texttt{</xsl:text>
         <xsl:apply-templates />
         <xsl:text>} </xsl:text>
     </xsl:template>
+    -->
 
+    <xsl:template match="code">
+        <xsl:text> \texttt{</xsl:text>
+        <xsl:apply-templates />
+        <xsl:text>} \index{</xsl:text>
+        <xsl:apply-templates />
+        <xsl:text>} </xsl:text>
+    </xsl:template>
 
     <!-- Gliffy Diagrams -->
 
