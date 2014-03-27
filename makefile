@@ -9,7 +9,7 @@ OUTPUT_NAME=output
 OUTPUT_FILENAME=$(HOME_DIR)/$(OUTPUT_NAME)
 OUTPUT_PDF=$(OUTPUT_FILENAME).pdf
 OUTPUT_TEX=$(OUTPUT_FILENAME).tex
-OUTPUT_IDX=$(OUTPUT_FILENAME).idx
+OUTPUT_IDX=$(OUTPUT_NAME).idx
 
 
 INPUT_SPACE=$(shell zipinfo -1 $(SPACE) *index.html)
@@ -75,6 +75,7 @@ build_xslfo:
 # If it works the first time, it will work the second time.
 build_pdf:
 	pdflatex -halt-on-error $(OUTPUT_TEX)
+	cd $(HOME_DIR) ; makeindex $(OUTPUT_IDX)
 	pdflatex -halt-on-error $(OUTPUT_TEX)
 
 view_pdf:
