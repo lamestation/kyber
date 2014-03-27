@@ -156,7 +156,17 @@
 
     <xsl:template match="table[@class='gliffy-macro-table']/tr/td/table[@class='gliffy-macro-inner-table']/tr/td/img[@class='gliffy-macro-image']">
         <xsl:text>  \includegraphics[width = 3.5in]{</xsl:text>
-        <xsl:value-of select="@src" />
+
+        <!-- confluence adds parameters when image effects are used; strip them -->
+        <xsl:choose>
+            <xsl:when test="contains(@src,'?')">
+                <xsl:value-of select="substring-before(@src,'?')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="@src" /><!-- confluence adds parameters when image effects are used; strip them -->
+            </xsl:otherwise>
+        </xsl:choose>
+
         <xsl:text>}&#xa;</xsl:text>
     </xsl:template>
 
@@ -185,7 +195,17 @@
                 <xsl:text>  \includegraphics[width = 3in]{</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:value-of select="@src" />
+
+        <!-- confluence adds parameters when image effects are used; strip them -->
+        <xsl:choose>
+            <xsl:when test="contains(@src,'?')">
+                <xsl:value-of select="substring-before(@src,'?')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="@src" /><!-- confluence adds parameters when image effects are used; strip them -->
+            </xsl:otherwise>
+        </xsl:choose>
+
         <xsl:text>}&#xa;</xsl:text>
         <xsl:if test="@title">
             <xsl:text>  \caption{</xsl:text>
@@ -239,6 +259,7 @@
     <!-- Haven't figured this one out yet -->
 
     <xsl:template match="div[@class='toc-macro']">BLIKSJDFOF<xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[@class='plugin_pagetree']"></xsl:template>
 
     <!-- LaTeX Features -->
 
@@ -285,13 +306,13 @@
 
     <xsl:template match="div[@class='codeContent panelContent pdl hide-toolbar']/pre">
         <xsl:text>\lstset{style=spin}&#xa;\begin{lstlisting}</xsl:text>
-        <xsl:copy-of select="text()" />
+        <xsl:value-of disable-output-escaping="yes" select="text()" />
         <xsl:text>\end{lstlisting}&#xa;&#xa;</xsl:text>
     </xsl:template>
 
     <xsl:template match="div[@class='codeContent panelContent pdl']/pre">
         <xsl:text>\lstset{style=spin}&#xa;\begin{lstlisting}</xsl:text>
-        <xsl:copy-of select="text()" />
+        <xsl:value-of disable-output-escaping="yes" select="text()" />
         <xsl:text>\end{lstlisting}&#xa;&#xa;</xsl:text>
     </xsl:template>
 
@@ -390,12 +411,18 @@
                 <xsl:apply-templates select="node()" />
                 <xsl:text>}&#xa;&#xa;</xsl:text>
             </xsl:when>
+            <xsl:when test="count(ancestor::book_section) = 4">
+                <xsl:text>&#xa;\subsubsection{</xsl:text>
+                <xsl:apply-templates select="node()" />
+                <xsl:text>}&#xa;&#xa;</xsl:text>
+            </xsl:when>
             <xsl:otherwise>
                 EVERYTHING SUCKS<xsl:apply-templates />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
+    <!-- This header support needs to be fleshed out -->
     <xsl:template match="h2|h3">
         <xsl:text>&#xa;\subsection{</xsl:text>
         <xsl:apply-templates select="node()" />
