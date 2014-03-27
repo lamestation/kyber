@@ -9,6 +9,7 @@ OUTPUT_NAME=output
 OUTPUT_FILENAME=$(HOME_DIR)/$(OUTPUT_NAME)
 OUTPUT_PDF=$(OUTPUT_FILENAME).pdf
 OUTPUT_TEX=$(OUTPUT_FILENAME).tex
+OUTPUT_IDX=$(OUTPUT_FILENAME).idx
 
 
 INPUT_SPACE=$(shell zipinfo -1 $(SPACE) *index.html)
@@ -17,7 +18,7 @@ INPUT_DIR=$(HOME_DIR)/$(dir $(INPUT_SPACE))
 export CLASSPATH=/usr/share/java/saxonb.jar
 
 
-all: validate_space open_archive prepare_html assemble_document build_latex build_pdf
+all: validate_space open_archive prepare_html assemble_document build_latex build_pdf view_pdf
 	@echo $(SPACE)
 	@echo $(INPUT_SPACE)
 	@echo $(INPUT_DIR)
@@ -73,13 +74,17 @@ build_xslfo:
 # Run, rerun (build cross-references), display
 # If it works the first time, it will work the second time.
 build_pdf:
-	pdflatex -halt-on-error $(OUTPUT_TEX) ; pdflatex $(OUTPUT_TEX) ; evince $(OUTPUT_PDF)
+	pdflatex -halt-on-error $(OUTPUT_TEX)
+	pdflatex -halt-on-error $(OUTPUT_TEX)
 
+view_pdf:
+	evince $(OUTPUT_PDF)
 
 
 clean:
 	rm -f $(OUTPUT_FILENAME).aux
 	rm -f $(OUTPUT_FILENAME).tex
+	rm -f $(OUTPUT_FILENAME).idx
 	rm -f $(OUTPUT_FILENAME).log
 	rm -f $(OUTPUT_FILENAME).out
 	rm -f $(OUTPUT_FILENAME).toc
