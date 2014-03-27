@@ -1,55 +1,64 @@
-\documentclass[twoside,openright]{book}
+\documentclass[twoside,openright]{scrbook}
 
 \usepackage[utf8x]{inputenc}    % support UNICODE; very important!!
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+
+
 \usepackage{amsmath}
 \usepackage{verbatim}
 \usepackage{graphicx}
 
-\usepackage{hyperref}
 \usepackage[vertfit]{breakurl}  
 
 \usepackage{fixltx2e}		%allows subscript to be used
 \usepackage{float}
-\usepackage{times}
-\usepackage{lastpage}
+
 \usepackage{subfig}
-\usepackage{color}
 \usepackage{xcolor}
 \usepackage[tikz]{bclogo}
 \usepackage[framemethod=tikz]{mdframed}
 \usepackage{enumitem}
-\setlist{itemsep=1pt,parsep=2pt}
 
-\usepackage{textcomp}
 
-\definecolor{bgblue}{RGB}{245,243,253}
-\definecolor{ttblue}{RGB}{91,194,224}
- 
 
 
 %set margins
 %set paper dimensions
 \usepackage[paperwidth=5.5in, paperheight=8.5in]{geometry}
+\textheight=8in
+\textwidth=5in
 \geometry{bindingoffset=0.5in}
 \usepackage{emptypage}
-
-%set header and footer
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyhead{}
-\fancyfoot{}
-
-\renewcommand{\chaptermark}[1]{\markboth{\thechapter\ |\ #1}{}}
-		
-		
-	
-\lhead{\leftmark}
-\rhead{\thepage}
-
+\usepackage{lastpage}
 
 %set spacing
 \usepackage{setspace}
 \singlespacing
+
+% Paragraph indenting
+\usepackage{parskip}
+\setlist{itemsep=1pt,parsep=2pt}
+
+
+
+%set header and footer
+\usepackage{fancyhdr}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}
+\fancyhf{}
+
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\renewcommand{\chaptermark}[1]{\markboth{\MakeUppercase{#1}}{}}
+\renewcommand{\sectionmark}[1]{\markright{\MakeUppercase{#1}}{}}
+
+\fancyhead[LE]{\textbf{\thepage}   \textit{\nouppercase{\leftmark}}}
+\fancyhead[RO]{\textit{\nouppercase{\rightmark}}   \textbf{\thepage}}
+
+	
 
 %CONSOLE TITLE
 \definecolor{lightblue}{rgb}{0.85,1,1} 
@@ -57,6 +66,9 @@
 \definecolor{darkblue}{rgb}{0,0,0.5} 
 \definecolor{darkred}{rgb}{0.6,0,0} 
 
+\definecolor{bgblue}{RGB}{245,243,253}
+\definecolor{ttblue}{RGB}{91,194,224}
+ 
 
 
 \input{tex/languages.tex}
@@ -73,45 +85,84 @@
             \vfill
 }}}
 
-\usepackage{pdfpages}
+%\usepackage{pdfpages}
 
 % table support
-%\usepackage{longtable}
-%\usepackage{tabularx}
 \usepackage{ltablex}
-\textheight=4in
 
 
 \usepackage{makeidx}
+\makeindex
 
-\usepackage[T1]{fontenc}
-\usepackage{titlesec, blindtext, color}
-\definecolor{gray75}{gray}{0.75}
+% Set up colors
+\definecolor{lightblue}{HTML}{007FFF}
+\definecolor{reallylightblue}{HTML}{BFDFFF}
+\definecolor{lightgray}{HTML}{D2D2D2}
+\definecolor{gray}{HTML}{BCBCBC}
+\definecolor{darkgray}{HTML}{787878}
+\definecolor{darkestgray}{HTML}{555555}
+
+
+
+% Set up titles
+\usepackage[raggedright]{titlesec}
 \newcommand{\hsp}{\hspace{20pt}}
-\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter\hsp\textcolor{gray75}{|}\hsp}{0pt}{\Huge\bfseries}
 \newcommand{\sectionbreak}{\clearpage}
 
+\titleformat{\chapter}[hang]{\Huge\scshape\bfseries\raggedright}
+{\thechapter\hsp\textcolor{gray}{|}\hsp}{0pt}{\Huge\bfseries}
 
-%\setcounter{secnumdepth}{3}
-%\setcounter{tocdepth}{3}
+\titleformat{\section}
+{\color{lightblue}\normalfont\Large\scshape\bfseries\raggedright}
+{\color{lightblue}\thesection}{1em}{}[{\color{gray}\titlerule[0.8pt]}]
+
+\titleformat{\subsection}
+{\color{darkgray}\normalfont\large\scshape\bfseries\raggedright}
+{\color{darkgray}\thesubsection}{1em}{}
 
 
-\title{{A Crash Course In LameStation} \\ Digital Synthesis, Computer Architecture, and Electronics Design Explored}
-\date{}
-\author{Brett Weir}
+
+\captionsetup[figure]{labelfont={color=darkgray,sc,bf},textfont={color=darkgray}}
+
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+
+\usepackage{hyperref}
 
 \begin{document}
 
-\lstset{style=C++}
+\begin{titlepage}
+    \begin{flushright}
+
+        \includegraphics[width=1in]{graphics/lamestation-seal-800px.png}
+
+        \vspace*{0.3\textheight}
+
+        \textsc{\LARGE A Crash Course In}
+        {\color{gray}{\rule{\textwidth}{1pt}}}
+        \includegraphics[width=\textwidth]{graphics/ls-logo-blue_1600.png}~\\[-0.4cm]
+        {\color{gray}{\rule{\textwidth}{1pt}}}
+
+        \textit{Digital Synthesis, Computer Architecture, and Electronics Design Explored}
+
+        \vfill
+        \textsc{\Large Brett Weir}
+
+
+    \end{flushright}
+\end{titlepage}
 
 \frontmatter
 
-\includepdf{graphics/bookcover_front.png}
-\cleardoublepage
-
-		\newpage
+\newpage
 														
 \tableofcontents
 
 \newpage
+
 \mainmatter
+
+
+
