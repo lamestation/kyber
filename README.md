@@ -1,16 +1,6 @@
-Kyber
-=====
-
 Anyone who has ever used Confluence was probably super excited about all the output formats it supported... until you actually tried it. Well, Kyber is here to help.
 
-Kyber is a free and open-source documentation workflow for Confluence.
-
-Kyber is being developed by LameStation LLC as the publishing toolchain for LameStation books and manuals.
-It facilitates authoring print-quality documents within Confluence.
-
-With Kyber, you can make documents that look like they came from O'Reilly, not your apartment.
-
-**Kyber is still in the early stages of development; use at your own risk.**
+Kyber is the publishing toolchain for LameStation's printed books and manuals. It facilitates authoring print-quality documents within Confluence. With Kyber, you can make documents that look like they came from O'Reilly, not your apartment.
 
 ### Features
 
@@ -27,7 +17,7 @@ With Kyber, you can make documents that look like they came from O'Reilly, not y
 
 While Kyber works with Confluence, it is **NOT** an add-on. We would like Kyber to work with other things in the future, not just Confluence, so we're keeping it separate.
 
-## Installation
+### Installation
 
 #### On Ubuntu
 
@@ -52,23 +42,12 @@ pass the export as a parameter.
 
 Watch as your space is rendered in glorious PDF.
 
-## Troubleshooting
+### Troubleshooting
 
 The conversion is done in three separate stages: document assembly, XSL conversion to LaTeX, LaTeX compilation to PDF.
 
 Make sure you have make, Python, Saxon, and LaTeX installed.
 
-## Things To Be Done
+### Bug Reporting
 
- * Add subfigure support (multiple images with top-level caption)
- * Make latex prefer to line break at white space
- * Make boxes prefer to not line break at all
- * Fix table support to adjust for varying column widths
- * Create image rotating algorithm and define expectations for image size
- * Figure out scheme for adding glossary
- * Add good formatting for highlight boxes
- * Verify handling of special characters in all cases
- * Create test confluence space that will thoroughly vet possible formatting
- * Scheme up decent interface for customizing look/feel
- * Add automatic header demotion
- * Need a good way to escape _, #, $, and &.
+Please report all Kyber bugs to the [issue tracker](https://github.com/lamestation/kyber/issues).
