@@ -1,77 +1,22 @@
 \documentclass[twoside,openright]{scrbook}
 
-\usepackage[utf8x]{inputenc}    % support UNICODE; very important!!
-\usepackage{times}
-\usepackage[T1]{fontenc}
-\usepackage{textcomp}
+\input{tex/fonts.tex}
 
-
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{verbatim}
 \usepackage{graphicx}
 
-\usepackage[vertfit]{breakurl}  
+\usepackage[vertfit]{breakurl} 
 
-\usepackage{fixltx2e}		%allows subscript to be used
 \usepackage{float}
-
 \usepackage{subfig}
-\usepackage{xcolor}
 \usepackage[tikz]{bclogo}
 \usepackage[framemethod=tikz]{mdframed}
 \usepackage{enumitem}
 
+\input{tex/paper.tex}
+\input{tex/colors.tex}
 
 
-%set margins
-%set paper dimensions
-\usepackage[paperwidth=5.5in, paperheight=8.5in]{geometry}
-\textheight=8in
-\textwidth=5in
-\geometry{bindingoffset=0.5in}
-\usepackage{emptypage}
-\usepackage{lastpage}
-
-%set spacing
-\usepackage{setspace}
-\singlespacing
-
-% Paragraph indenting
-\usepackage{parskip}
-\setlist{itemsep=1pt,parsep=2pt}
-
-
-
-
-%CONSOLE TITLE
-\definecolor{lightblue}{rgb}{0.85,1,1} 
-\definecolor{lightgreen}{rgb}{0.8,1,0.9} 
-\definecolor{darkblue}{rgb}{0,0,0.5} 
-\definecolor{darkred}{rgb}{0.6,0,0} 
-
-\definecolor{bgblue}{RGB}{245,243,253}
-\definecolor{ttblue}{RGB}{91,194,224}
- 
-
-
-%set header and footer
-\usepackage{fancyhdr}
-\setlength{\headheight}{15pt}
-\pagestyle{fancy}
-\fancyhf{}
-
-\renewcommand{\headrulewidth}{0pt}
-\renewcommand{\footrulewidth}{0pt}
-
-\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
-\renewcommand{\sectionmark}[1]{\markright{#1}{}}
-
-\fancyhead[LE]{\color{darkgray}{\textbf{\thepage}} \color{lightgray}{$\blacksquare$} \color{darkgray}{\textsc{\leftmark}}}
-\fancyhead[RO]{\color{darkgray}{\textsc{\rightmark}} \color{lightgray}{$\blacksquare$} \color{darkgray}{\textbf{\thepage}}}
-
-	
-
+\input{tex/fancyhdr.tex}
 \input{tex/languages.tex}
 
 
@@ -91,40 +36,12 @@
 % table support
 \usepackage{ltablex}
 
+
 \usepackage{imakeidx}
 \makeindex[intoc]
 
-% Set up colors
-\definecolor{lightblue}{HTML}{007FFF}
-\definecolor{reallylightblue}{HTML}{BFDFFF}
-\definecolor{lightgray}{HTML}{D2D2D2}
-\definecolor{gray}{HTML}{BCBCBC}
-\definecolor{darkgray}{HTML}{787878}
-\definecolor{darkestgray}{HTML}{555555}
-\definecolor{black}{HTML}{000000}
 
-
-
-% Set up titles
-\usepackage[raggedright]{titlesec}
-\newcommand{\hsp}{\hspace{20pt}}
-\newcommand{\sectionbreak}{\clearpage}
-
-\titleformat{\chapter}[hang]{\Huge\scshape\bfseries\raggedright}
-{\thechapter\hsp\textcolor{gray}{|}\hsp}{0pt}{\Huge\bfseries}
-
-\titleformat{\section}
-{\color{lightblue}\normalfont\Large\scshape\bfseries\raggedright}
-{\color{lightblue}\thesection}{1em}{}[{\color{gray}\titlerule[0.8pt]}]
-
-\titleformat{\subsection}
-{\color{darkgray}\normalfont\large\scshape\bfseries\raggedright}
-{\color{darkgray}\thesubsection}{1em}{}
-
-\titleformat{\subsubsection}
-{\color{gray}\normalfont\scshape\bfseries\raggedright}
-{\color{gray}\thesubsection}{1em}{}
-
+\input{tex/sections.tex}
 
 \captionsetup[figure]{labelfont={color=darkgray,sc,bf},textfont={color=darkgray}}
 
@@ -137,26 +54,7 @@
 
 \begin{document}
 
-\begin{titlepage}
-    \begin{flushright}
-
-        \includegraphics[width=1in]{graphics/lamestation-seal-800px.png}
-
-        \vspace*{0.3\textheight}
-
-        \textsc{\LARGE A Crash Course In}
-        {\color{gray}{\rule{\textwidth}{1pt}}}
-        \includegraphics[width=\textwidth]{graphics/ls-logo-blue_1600.png}~\\[-0.4cm]
-        {\color{gray}{\rule{\textwidth}{1pt}}}
-
-        \textit{Digital Synthesis, Computer Architecture, and Electronics Design Explored}
-
-        \vfill
-        \textsc{\Large Brett Weir}
-
-
-    \end{flushright}
-\end{titlepage}
+\input{tex/titlepage.tex}
 
 \frontmatter
 
@@ -167,6 +65,3 @@
 \newpage
 
 \mainmatter
-
-
-
