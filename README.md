@@ -1,29 +1,31 @@
 Kyber
 =====
 
-Kyber is a free and open-source documentation workflow for
-Confluence.
+Kyber is a free and open-source documentation workflow for Confluence.
+
+Kyber is being developed by LameStation LLC as the publishing toolchain for LameStation books and manuals.
+It facilitates authoring print-quality documents within Confluence.
+
+With Kyber, your work looks like it came from O'Reilly, not your apartment. Sell that to your manager!
 
 But what does it do?
 
 * Doxygen-style source code markup rendered to Confluence pages
-* LaTeX-driven PDF generation from Confluence pages; no expensive enterprise solution
-* Propeller Spin and PASM language definitions (finally!)
-* Customizable with the full power of LaTeX
-* Full UTF-8 and internationization support throughout
-* Intelligent image scaling built into the environment
-* Uses the Saxon parser for full XSLT 2.0 support
-* Use make for strict error checking on build
+* LaTeX-driven PDF generation from Confluence pages
+* Tables, images, and figures that look good and don't spill off the page
+* Intelligent image placement based on image and paper size and dimensions
+* Add captions, indexes, footnotes, no problem
 
-Like the mountain pass that connected much of the ancient world, Kyber is
-the link between your project and your wiki, keeping them connected and
-mutually up-to-date.
+Here's what we'd like to add:
 
-*Note: There is some support for XSL-FO but this is being deprecated in favor of LaTeX.*
+* Control the look and feel of your book without leaving your Confluence space
+* More output formats: text files, man pages, docbook, etc.
+
+While Kyber works with Confluence, it is **NOT** an add-on. We would like Kyber to work with other things in the future, not just Confluence, so we're keeping it separate.
 
 ## Installation
 
-On Ubuntu, installation is easy. Install any needed dependencies first, probably:
+#### On Ubuntu
 
     # XHTML
     sudo apt-get install xsltproc libxml2-utils tidy libsaxonb-java
@@ -42,16 +44,17 @@ pass the export as a parameter.
 
     ./kyber path/to/confluence-space.html.zip
 
-**BE CAREFUL**: Kyber currently does **zero** error checking on its input; be mindful of what you're doing.
+**BE CAREFUL**: Kyber currently does **zero** error checking on its input; make sure the zipfile is valid before running.
+
 Watch as your space is rendered in glorious PDF.
 
 ## Troubleshooting
 
 The conversion is done in three separate stages: document assembly, XSL conversion to LaTeX, LaTeX compilation to PDF.
 
-Make sure you have Python, xsltproc, Saxon, and LaTeX installed.
+Make sure you have make, Python, Saxon, and LaTeX installed.
 
-## To Do
+## Things To Be Done
 
  * Add subfigure support (multiple images with top-level caption)
  * Make latex prefer to line break at white space
