@@ -6,7 +6,8 @@ TEX_DIR=$(HOME_DIR)/tex
 INTER_XML=$(INPUT_DIR)/final.xml
 
 OUTPUT_NAME=output
-OUTPUT_FILENAME=$(HOME_DIR)/$(OUTPUT_NAME)
+OUTPUT_DIR=$(HOME_DIR)/$(OUTPUT_NAME)
+OUTPUT_FILENAME=$(OUTPUT_DIR)/$(OUTPUT_NAME)
 OUTPUT_PDF=$(OUTPUT_FILENAME).pdf
 OUTPUT_TEX=$(OUTPUT_FILENAME).tex
 OUTPUT_IDX=$(OUTPUT_NAME).idx
@@ -59,6 +60,7 @@ assemble_document: prepare_html
 
 # Convert master page to LaTeX, and combine with formatting rules
 build_latex: assemble_document
+	mkdir $(OUTPUT_DIR) -p
 	cp -f $(TEX_DIR)/header.tex $(OUTPUT_TEX)
 	cat $(INTER_XML) \
 		| tidy -xml -indent -utf8 > $(INTER_XML)2
@@ -74,19 +76,14 @@ build_xslfo:
 # Run, rerun (build cross-references), display
 # If it works the first time, it will work the second time.
 build_pdf: build_latex
-	pdflatex -halt-on-error $(OUTPUT_TEX)
-	cd $(HOME_DIR) ; makeindex $(OUTPUT_IDX)
-	pdflatex -halt-on-error $(OUTPUT_TEX)
+	pdflatex -halt-on-error -aux-directory=$(OUTPUT_DIR) -output-directory=$(OUTPUT_DIR) $(OUTPUT_TEX)
+	cd $(OUTPUT_DIR) ; makeindex $(OUTPUT_IDX)
+	pdflatex -halt-on-error -aux-directory=$(OUTPUT_DIR) -output-directory=$(OUTPUT_DIR) $(OUTPUT_TEX)
 
 view_pdf: build_pdf
 	evince $(OUTPUT_PDF)
 
 
 clean:
-	rm -f $(OUTPUT_FILENAME).aux
-	rm -f $(OUTPUT_FILENAME).tex
-	rm -f $(OUTPUT_FILENAME).idx
-	rm -f $(OUTPUT_FILENAME).log
-	rm -f $(OUTPUT_FILENAME).out
-	rm -f $(OUTPUT_FILENAME).toc
-	rm -f $(OUTPUT_FILENAME).pdf
+	rm -rf $(OUTPUT_DIR)/
+	rm -rf $(HOME_DIR)/attachments/
