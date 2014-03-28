@@ -10,6 +10,8 @@ It facilitates authoring print-quality documents within Confluence.
 
 With Kyber, you can make documents that look like they came from O'Reilly, not your apartment.
 
+**Kyber is still in the early stages of development; use at your own risk.**
+
 ### Features
 
 * Doxygen-style source code markup rendered to Confluence pages
