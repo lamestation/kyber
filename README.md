@@ -1,5 +1,4 @@
-# Kyber
-*A free and open-source documentation workflow for Confluence.*
+# Welcome To Kyber
 
 Anyone who has ever used Confluence was probably super excited about all the output formats it supported... until you actually tried it. Well, Kyber is here to help.
 
