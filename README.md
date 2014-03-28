@@ -1,3 +1,6 @@
+# Kyber
+*A free and open-source documentation workflow for Confluence.*
+
 Anyone who has ever used Confluence was probably super excited about all the output formats it supported... until you actually tried it. Well, Kyber is here to help.
 
 Kyber is the publishing toolchain for LameStation's printed books and manuals. It facilitates authoring print-quality documents within Confluence. With Kyber, you can make documents that look like they came from O'Reilly, not your apartment.
