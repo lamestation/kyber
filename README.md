@@ -1,14 +1,16 @@
 Kyber
 =====
 
+Anyone who has ever used Confluence was probably super excited about all the output formats it supported... until you actually tried it. Well, Kyber is here to help.
+
 Kyber is a free and open-source documentation workflow for Confluence.
 
 Kyber is being developed by LameStation LLC as the publishing toolchain for LameStation books and manuals.
 It facilitates authoring print-quality documents within Confluence.
 
-With Kyber, your work looks like it came from O'Reilly, not your apartment. Sell that to your manager!
+With Kyber, you can make documents that look like they came from O'Reilly, not your apartment.
 
-But what does it do?
+### Features
 
 * Doxygen-style source code markup rendered to Confluence pages
 * LaTeX-driven PDF generation from Confluence pages
@@ -16,7 +18,7 @@ But what does it do?
 * Intelligent image placement based on image and paper size and dimensions
 * Add captions, indexes, footnotes, no problem
 
-Here's what we'd like to add:
+### Goals
 
 * Control the look and feel of your book without leaving your Confluence space
 * More output formats: text files, man pages, docbook, etc.
