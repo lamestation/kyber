@@ -11,6 +11,8 @@ def add_closing_tag(tag,string):
 
 g = add_closing_tag('img',f)
 g = add_closing_tag('input',g)
+g = re.sub("(<title>)[^:<]*:[ \t]*","\g<1>",g)
+
 f = open(sys.argv[1],'w')
 f.write(g)
 f.close()

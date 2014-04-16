@@ -12,6 +12,8 @@ OUTPUT_PDF=$(OUTPUT_FILENAME).pdf
 OUTPUT_TEX=$(OUTPUT_FILENAME).tex
 OUTPUT_IDX=$(OUTPUT_NAME).idx
 
+HTML_OUT=$(OUTPUT_DIR)/manual
+
 
 INPUT_SPACE=$(shell zipinfo -1 $(SPACE) *index.html)
 INPUT_DIR=$(HOME_DIR)/$(dir $(INPUT_SPACE))
@@ -19,11 +21,19 @@ INPUT_DIR=$(HOME_DIR)/$(dir $(INPUT_SPACE))
 export CLASSPATH=/usr/share/java/saxonb.jar
 
 
-all: view_pdf
+all:
+	@echo "Choose something to build!"
+	@echo ""
+	@echo "    make [pdf,site] SPACE=name.zip"
+	@echo ""
 	@echo $(SPACE)
 	@echo $(INPUT_SPACE)
 	@echo $(INPUT_DIR)
-	@echo Build all done!
+
+
+pdf: view_pdf
+site: build_website
+
 
 
 # Prepare weird Confluence XHTML to be consumed by normal parser
@@ -55,11 +65,24 @@ prepare_html: open_archive
 	cp -ur $(INPUT_DIR)/attachments $(HOME_DIR)
 
 # Build single master page using space index page.
-assemble_document: prepare_html
+assemble_singledocument: prepare_html
 	java net.sf.saxon.Transform -xsl:$(STYLE_DIR)/index.xsl -s:$(INPUT_DIR)/index.html > $(INTER_XML)
 
+# Generate Jekyll-friendly web pages for online book
+build_website: prepare_html
+	mkdir -p $(HTML_OUT)
+	cd $(INPUT_DIR) ; \
+	for f in *.html ; \
+	do \
+		echo $(INPUT_DIR)/$$f ; \
+		xsltproc $(STYLE_DIR)/html.xsl $(INPUT_DIR)/$$f > $(HTML_OUT)/$$f ; \
+		sed -n '/[^ \t]/p' -i $(HTML_OUT)/$$f ; \
+	done
+	cp -ur $(INPUT_DIR)/attachments $(HTML_OUT)
+
+
 # Convert master page to LaTeX, and combine with formatting rules
-build_latex: assemble_document
+build_latex: assemble_singledocument
 	mkdir $(OUTPUT_DIR) -p
 	cp -f $(TEX_DIR)/header.tex $(OUTPUT_TEX)
 	cat $(INTER_XML) \
@@ -85,5 +108,4 @@ view_pdf: build_pdf
 
 
 clean:
-	rm -rf $(OUTPUT_DIR)/
 	rm -rf $(HOME_DIR)/attachments/
