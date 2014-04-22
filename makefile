@@ -77,7 +77,10 @@ build_website: prepare_html
 		echo $(INPUT_DIR)/$$f ; \
 		xsltproc $(STYLE_DIR)/html.xsl $(INPUT_DIR)/$$f > $(HTML_OUT)/$$f ; \
 		sed -n '/[^ \t]/p' -i $(HTML_OUT)/$$f ; \
-	done
+	done ; \
+	echo "---\nlayout: manpage\ntitle: Manual\n---" > $(HTML_OUT)/index.html ; \
+	xsltproc $(STYLE_DIR)/navbar.xsl $(INPUT_DIR)/index.html >> $(HTML_OUT)/index.html ; \
+	sed -n '/[^ \t]/p' -i $(HTML_OUT)/index.html
 	cp -ur $(INPUT_DIR)/attachments $(HTML_OUT)
 
 
