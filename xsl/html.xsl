@@ -17,9 +17,10 @@
     <xsl:template match="div[@class='pageSectionHeader']"></xsl:template>
     <xsl:template match="div[@id='page']"><xsl:apply-templates /></xsl:template>
     <xsl:template match="div[@id='main'][@class='aui-page-panel']"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="div[@id='content'][@class='view']"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[@id='content']"><xsl:apply-templates /></xsl:template>
     <xsl:template match="meta"></xsl:template>
     <xsl:template match="META"></xsl:template>
+    <xsl:template match="br"></xsl:template>
 
 
     <!-- Character escaping -->
@@ -33,14 +34,7 @@
 
     <xsl:template match="html"><xsl:apply-templates /></xsl:template>
     <xsl:template match="head"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="title">
-        <xsl:text>&#10;---&#10;</xsl:text>
-        <xsl:text>layout: manpage&#10;</xsl:text>
-        <xsl:text>title: </xsl:text>
-        <xsl:apply-templates />
-        <xsl:text>&#10;</xsl:text>
-        <xsl:text>---&#10;</xsl:text>
-        </xsl:template>
+    <xsl:template match="title"></xsl:template>
     <xsl:template match="link"></xsl:template>
     <xsl:template match="body"><xsl:apply-templates /></xsl:template>
 
@@ -91,12 +85,13 @@
 
 
 
-
     <xsl:template match="@*|node()">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
+
+
 
 
 </xsl:stylesheet>
