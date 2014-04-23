@@ -66,23 +66,55 @@
 
     <xsl:template match="pre[@class='spin']">
         <pre>
-        <xsl:copy-of select="pre/text()" />
+            <xsl:copy-of select="pre/text()" />
         </pre>
     </xsl:template>
 
     <xsl:template match="pre[@class='pasm']">
         <pre>
-        <xsl:copy-of select="pre/text()" />
+            <xsl:copy-of select="pre/text()" />
         </pre>
     </xsl:template>
+
+
+
+    <xsl:template match="div[@class='aui-message problem shadowed information-macro']">
+        <div class="alert alert-error">
+            <xsl:apply-templates />
+        </div>
+    </xsl:template>
+    <xsl:template match="div[@class='aui-message problem shadowed information-macro']/span"></xsl:template>
+    <xsl:template match="div[@class='aui-message problem shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
+
+    <xsl:template match="div[@class='aui-message warning shadowed information-macro']">
+        <div class="alert alert-block">
+            <xsl:apply-templates />
+        </div>
+    </xsl:template>
+    <xsl:template match="div[@class='aui-message warning shadowed information-macro']/span"></xsl:template>
+    <xsl:template match="div[@class='aui-message warning shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
+
+    <xsl:template match="div[@class='aui-message hint shadowed information-macro']">
+        <div class="alert alert-info">
+            <xsl:apply-templates />
+        </div>
+    </xsl:template>
+    <xsl:template match="div[@class='aui-message hint shadowed information-macro']/span"></xsl:template>
+    <xsl:template match="div[@class='aui-message hint shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
+
+    <xsl:template match="div[@class='aui-message success shadowed information-macro']">
+        <div class="alert alert-success">
+            <xsl:apply-templates />
+        </div>
+    </xsl:template>
+    <xsl:template match="div[@class='aui-message success shadowed information-macro']/span"></xsl:template>
+    <xsl:template match="div[@class='aui-message success shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
 
 
 
     <xsl:template match="span">
         <xsl:apply-templates select="node()" />
     </xsl:template>
-
-
 
 
     <xsl:template match="@*|node()">
