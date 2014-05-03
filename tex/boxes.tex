@@ -1,0 +1,45 @@
+\usepackage[tikz]{bclogo}
+\usepackage[framemethod=tikz]{mdframed}
+
+\mdfsetup{%
+    fontcolor=white,
+    middlelinewidth=0pt,
+    roundcorner=0pt,
+    leftmargin=1cm,
+    rightmargin=1cm,
+    innerbottommargin=10pt,
+    innerleftmargin=10pt,
+    innerleftmargin=50pt,
+    roundcorner=10pt,
+    skipabove=10pt,
+    skipbelow=10pt
+}
+
+\mdfdefinestyle{problem}{
+    backgroundcolor=spin_pri,
+    fontcolor=black
+}
+\mdfdefinestyle{warning}{
+    backgroundcolor=spin_dat,
+    fontcolor=white
+}
+\mdfdefinestyle{hint}{
+    backgroundcolor=spin_comment,
+    fontcolor=white,
+    singleextra={
+        \node[inner sep=0pt,anchor=north west,xshift=10pt,yshift=-20pt] at (P-|O) {\includegraphics[width=1cm,height=1cm]{graphics/ico-power.png}};
+    },
+    firstextra={
+        \node[inner sep=0pt,anchor=north west,xshift=10pt,yshift=-20pt] at (P-|O) {\includegraphics[width=1cm,height=1cm]{graphics/ico-power.png}};
+    }
+}
+\mdfdefinestyle{success}{
+    backgroundcolor=darkestgray,
+    fontcolor=white,
+    singleextra={
+        \node[inner sep=0pt,anchor=north west,xshift=10pt,yshift=-20pt] at (P-|O) {\includegraphics[width=1cm,height=1cm]{graphics/ico-power.png}};
+    },
+    firstextra={
+        \node[inner sep=0pt,anchor=north west,xshift=10pt,yshift=-20pt] at (P-|O) {\includegraphics[width=1cm,height=1cm]{graphics/ico-power.png}};
+    }
+}

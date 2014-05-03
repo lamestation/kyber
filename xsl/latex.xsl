@@ -340,43 +340,36 @@
 
     <!-- Friendly box messages -->
 
-    <!--    <xsl:template match="div"><xsl:apply-templates /></xsl:template> -->
     <xsl:template match="div[@class='aui-message problem shadowed information-macro']">
-        <xsl:text>\begin{bclogo}[couleur=bgblue, arrondi =0, logo=\bcbombe, barre=none,noborder=true]{}</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>\itshape </xsl:text>
+        <xsl:text>\begin{mdframed}[style=problem]&#xa;</xsl:text>
         <xsl:apply-templates select="node()" />
-        <xsl:text>\end{bclogo}&#xa;</xsl:text>
+        <xsl:text>&#xa;\end{mdframed}&#xa;</xsl:text>
     </xsl:template>
-    <xsl:template match="div[@class='aui-message problem shadowed information-macro']/span"></xsl:template>
-    <xsl:template match="div[@class='aui-message problem shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
 
     <xsl:template match="div[@class='aui-message warning shadowed information-macro']">
-        <xsl:text>\begin{bclogo}[couleur=bgblue, arrondi =0, logo=\bcbombe, barre=none,noborder=true]{}</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>\itshape </xsl:text>
+        <xsl:text>\begin{mdframed}[style=warning]&#xa;</xsl:text>
         <xsl:apply-templates select="node()" />
-        <xsl:text>\end{bclogo}&#xa;</xsl:text>
+        <xsl:text>&#xa;\end{mdframed}&#xa;</xsl:text>
     </xsl:template>
-    <xsl:template match="div[@class='aui-message warning shadowed information-macro']/span"></xsl:template>
-    <xsl:template match="div[@class='aui-message warning shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
 
     <xsl:template match="div[@class='aui-message hint shadowed information-macro']">
-        <xsl:text>\begin{bclogo}[couleur=bgblue, arrondi =0, logo=\bcbombe, barre=none,noborder=true]{}</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>\itshape </xsl:text>
+        <xsl:text>\begin{mdframed}[style=hint]&#xa;</xsl:text>
         <xsl:apply-templates select="node()" />
-        <xsl:text>\end{bclogo}&#xa;</xsl:text>
+        <xsl:text>&#xa;\end{mdframed}&#xa;</xsl:text>
     </xsl:template>
-    <xsl:template match="div[@class='aui-message hint shadowed information-macro']/span"></xsl:template>
-    <xsl:template match="div[@class='aui-message hint shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
 
     <xsl:template match="div[@class='aui-message success shadowed information-macro']">
-        <xsl:text>\begin{bclogo}[couleur=bgblue, arrondi =0, logo=\bcbombe, barre=none,noborder=true]{}</xsl:text>
-        <xsl:text>&#xa;\itshape </xsl:text>
+        <xsl:text>\begin{mdframed}[style=success]&#xa;</xsl:text>
         <xsl:apply-templates select="node()" />
-        <xsl:text>\end{bclogo}&#xa;</xsl:text>
+        <xsl:text>&#xa;\end{mdframed}&#xa;</xsl:text>
     </xsl:template>
+
+    <xsl:template match="div[@class='aui-message problem shadowed information-macro']/span"></xsl:template>
+    <xsl:template match="div[@class='aui-message problem shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[@class='aui-message warning shadowed information-macro']/span"></xsl:template>
+    <xsl:template match="div[@class='aui-message warning shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[@class='aui-message hint shadowed information-macro']/span"></xsl:template>
+    <xsl:template match="div[@class='aui-message hint shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
     <xsl:template match="div[@class='aui-message success shadowed information-macro']/span"></xsl:template>
     <xsl:template match="div[@class='aui-message success shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
 

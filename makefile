@@ -87,6 +87,7 @@ build_latex: assemble_singledocument
 	cp -f $(TEX_DIR)/header.tex $(OUTPUT_TEX)
 	cat $(INTER_XML) \
 		| tidy -xml -indent -utf8 > $(INTER_XML)2
+	sed -f $(SED_DIR)/intermediate.sed -i $(INTER_XML)2
 	java net.sf.saxon.Transform -xsl:$(STYLE_DIR)/latex.xsl -s:$(INTER_XML)2 > tmp.1
 	sed -f $(SED_DIR)/output.sed tmp.1 >> $(OUTPUT_TEX)
 	rm tmp.1
