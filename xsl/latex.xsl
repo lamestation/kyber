@@ -341,27 +341,27 @@
     <!-- Friendly box messages -->
 
     <xsl:template match="div[@class='aui-message problem shadowed information-macro']">
-        <xsl:text>\begin{mdframed}[style=problem]&#xa;</xsl:text>
+        <xsl:text>\begin{minipage}{\textwidth}\begin{mdframed}[style=problem]&#xa;</xsl:text>
         <xsl:apply-templates select="node()" />
-        <xsl:text>&#xa;\end{mdframed}&#xa;</xsl:text>
+        <xsl:text>&#xa;\end{mdframed}\end{minipage}&#xa;</xsl:text>
     </xsl:template>
 
     <xsl:template match="div[@class='aui-message warning shadowed information-macro']">
-        <xsl:text>\begin{mdframed}[style=warning]&#xa;</xsl:text>
+        <xsl:text>\begin{minipage}{\textwidth}\begin{mdframed}[style=warning]&#xa;</xsl:text>
         <xsl:apply-templates select="node()" />
-        <xsl:text>&#xa;\end{mdframed}&#xa;</xsl:text>
+        <xsl:text>&#xa;\end{mdframed}\end{minipage}&#xa;</xsl:text>
     </xsl:template>
 
     <xsl:template match="div[@class='aui-message hint shadowed information-macro']">
-        <xsl:text>\begin{mdframed}[style=hint]&#xa;</xsl:text>
+        <xsl:text>\begin{minipage}{\textwidth}\begin{mdframed}[style=hint]&#xa;</xsl:text>
         <xsl:apply-templates select="node()" />
-        <xsl:text>&#xa;\end{mdframed}&#xa;</xsl:text>
+        <xsl:text>&#xa;\end{mdframed}\end{minipage}&#xa;</xsl:text>
     </xsl:template>
 
     <xsl:template match="div[@class='aui-message success shadowed information-macro']">
-        <xsl:text>\begin{mdframed}[style=success]&#xa;</xsl:text>
+        <xsl:text>\begin{minipage}{\textwidth}\begin{mdframed}[style=success]&#xa;</xsl:text>
         <xsl:apply-templates select="node()" />
-        <xsl:text>&#xa;\end{mdframed}&#xa;</xsl:text>
+        <xsl:text>&#xa;\end{mdframed}\end{minipage}&#xa;</xsl:text>
     </xsl:template>
 
     <xsl:template match="div[@class='aui-message problem shadowed information-macro']/span"></xsl:template>

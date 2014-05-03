@@ -16,21 +16,33 @@
 }
 
 \mdfdefinestyle{problem}{
-    backgroundcolor=spin_pri,
-    fontcolor=black
+    backgroundcolor=black,
+    fontcolor=white,
+    singleextra={
+        \node[inner sep=0pt,anchor=north west,xshift=10pt,yshift=-20pt] at (P-|O) {\includegraphics[width=1cm,height=1cm]{graphics/ico-warning.png}};
+    },
+    firstextra={
+        \node[inner sep=0pt,anchor=north west,xshift=10pt,yshift=-20pt] at (P-|O) {\includegraphics[width=1cm,height=1cm]{graphics/ico-warning.png}};
+    }
 }
 \mdfdefinestyle{warning}{
     backgroundcolor=spin_dat,
-    fontcolor=white
-}
-\mdfdefinestyle{hint}{
-    backgroundcolor=spin_comment,
-    fontcolor=white,
+    fontcolor=black,
     singleextra={
-        \node[inner sep=0pt,anchor=north west,xshift=10pt,yshift=-20pt] at (P-|O) {\includegraphics[width=1cm,height=1cm]{graphics/ico-power.png}};
+        \node[inner sep=0pt,anchor=north west,xshift=10pt,yshift=-20pt] at (P-|O) {\includegraphics[width=1cm,height=1cm]{graphics/ico-warning.png}};
     },
     firstextra={
-        \node[inner sep=0pt,anchor=north west,xshift=10pt,yshift=-20pt] at (P-|O) {\includegraphics[width=1cm,height=1cm]{graphics/ico-power.png}};
+        \node[inner sep=0pt,anchor=north west,xshift=10pt,yshift=-20pt] at (P-|O) {\includegraphics[width=1cm,height=1cm]{graphics/ico-warning.png}};
+    }
+}
+\mdfdefinestyle{hint}{
+    backgroundcolor=spin_pri,
+    fontcolor=black,
+    singleextra={
+        \node[inner sep=0pt,anchor=north west,xshift=10pt,yshift=-20pt] at (P-|O) {\includegraphics[width=1cm,height=1cm]{graphics/ico-warning.png}};
+    },
+    firstextra={
+        \node[inner sep=0pt,anchor=north west,xshift=10pt,yshift=-20pt] at (P-|O) {\includegraphics[width=1cm,height=1cm]{graphics/ico-warning.png}};
     }
 }
 \mdfdefinestyle{success}{
