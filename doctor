@@ -90,7 +90,7 @@ else:
                 fullblock = label+textblock[i+1]
 
                 title = textblock[i+1].split('\n',1)[0]
-                content[label] += "\n<h4>"+title+"</h4>"
+                content[label] += "\n<h3>"+title+"</h3>"
 
                 # Comments will be parsed in markdown for fancier output
                 markdownblock = re.findall("\n.*\'\'.*",fullblock)
@@ -111,9 +111,9 @@ else:
                         content[label],flags=re.S)
 
                 # Add code excerpts for reference
-                content[label] += '<ac:structured-macro ac:name="code"><ac:parameter ac:name="collapse">true</ac:parameter><ac:plain-text-body><![CDATA['
-                content[label] += "\n"+re.sub("(?m)\n\'\'.*","",fullblock)
-                content[label] += ']]></ac:plain-text-body></ac:structured-macro>'
+#                content[label] += '<ac:structured-macro ac:name="code"><ac:parameter ac:name="collapse">true</ac:parameter><ac:plain-text-body><![CDATA['
+#                content[label] += "\n"+re.sub("(?m)\n\'\'.*","",fullblock)
+#                content[label] += ']]></ac:plain-text-body></ac:structured-macro>'
 
 
 
