@@ -44,21 +44,26 @@
     <!-- Tables -->
 
     <xsl:template match="div[@class='table-wrap']">
-        <xsl:text>\begin{table}&#10;</xsl:text>
         <xsl:apply-templates select="node()" />
-        <xsl:text>\end{table}&#10;</xsl:text>
     </xsl:template>
     <!--<xsl:template match="table"><table><xsl:apply-templates /></table></xsl:template> -->
 
-    <xsl:template match="table[@class='confluenceTable']/tbody">
-        <xsl:text>\begin{tabularx}{\linewidth}{ X X l X X X X }&#10;</xsl:text>
+    <xsl:template match="table[@class='confluenceTable']">
+        <xsl:text>\begin{longtabu} to \textwidth { | </xsl:text>
+
+        <!-- count number of columns -->
+        <xsl:for-each select="for $i in 1 to count(./tbody[1]/tr[1]/th|./tbody[1]/tr[1]/td|./thead[1]/tr[1]/th|./thead[1]/tr[1]/td) return $i">
+            <xsl:text>l | </xsl:text>
+         </xsl:for-each>
+
+        <xsl:text>}&#10;</xsl:text>
         <xsl:text>\hline&#10;</xsl:text>
         <xsl:apply-templates select="node()" />
-        <xsl:text>\end{tabularx}&#10;</xsl:text>
+        <xsl:text>\end{longtabu}&#10;</xsl:text>
     </xsl:template>
-    <xsl:template match="table[@class='confluenceTable']">
-        <xsl:apply-templates select="node()" />
-    </xsl:template>
+
+    <xsl:template match="thead"><xsl:apply-templates select="node()" /></xsl:template>
+    <xsl:template match="tbody"><xsl:apply-templates select="node()" /></xsl:template>
 
 
     <xsl:template match="tr">
@@ -67,7 +72,37 @@
     </xsl:template>
 
     <!-- get rid of table images for now -->
-    <xsl:template match="td//img|th//img" />
+    <!--<xsl:template match="td//img|th//img" />-->
+    <xsl:template match="td/img|th/img">
+        <xsl:choose>
+            <xsl:when test="@width">
+                <xsl:text> \vspace{0cm}\includegraphics[width = </xsl:text>
+                <xsl:value-of select="number(@width) div 2" />
+                <xsl:text>px]{</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>  \includegraphics[width = 1in]{</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+
+        <!-- confluence adds parameters when image effects are used; strip them -->
+        <xsl:choose>
+            <xsl:when test="contains(@src,'?')">
+                <xsl:value-of select="substring-before(@src,'?')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="@src" /><!-- confluence adds parameters when image effects are used; strip them -->
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:template>
+
+
+
+    <!-- center align divs -->
+    <xsl:template match="div/@align"><xsl:apply-templates /></xsl:template>
+
+
 
     <!-- Table cells -->
     <xsl:template match="td|th">
@@ -182,9 +217,7 @@
 
     <!-- Images -->
 
-    <xsl:template match="img">
-        <xsl:text>\begin{figure}[!htb]&#xa;</xsl:text>
-        <xsl:text>  \centering&#xa;</xsl:text>
+    <xsl:template match="p//img">
         <xsl:choose>
             <xsl:when test="@width">
                 <xsl:text>  \includegraphics[width = </xsl:text>
@@ -207,12 +240,6 @@
         </xsl:choose>
 
         <xsl:text>}&#xa;</xsl:text>
-        <xsl:if test="@title">
-            <xsl:text>  \caption{</xsl:text>
-            <xsl:value-of select="@title" />
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:text>\end{figure}&#xa;</xsl:text>
     </xsl:template>
 
 
@@ -254,11 +281,17 @@
         <xsl:apply-templates select="node()" />
     </xsl:template>
 
+    <xsl:template match="div[@class='contentLayout2']"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[contains(@class,'columnLayout')]"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[@class='cell aside']"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[@class='innerCell']"><xsl:apply-templates /></xsl:template>
+
     <!-- TOC -->
 
     <!-- Haven't figured this one out yet -->
 
-    <xsl:template match="div[@class='toc-macro']">BLIKSJDFOF<xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[contains(@class,'toc-macro')]"></xsl:template>
+    <xsl:template match="div[contains(@class,'cell')]"><xsl:apply-templates /></xsl:template>
     <xsl:template match="div[@class='plugin_pagetree']"></xsl:template>
 
     <!-- LaTeX Features -->
@@ -303,16 +336,17 @@
 
     <xsl:template match="div[@class='code panel pdl']"><xsl:apply-templates /></xsl:template>
     <xsl:template match="div[@class='codeHeader panelHeader pdl hide-border-bottom']"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[@class='codeHeader panelHeader pdl']"><xsl:apply-templates /></xsl:template>
 
     <xsl:template match="div[@class='codeContent panelContent pdl hide-toolbar']/pre">
         <xsl:text>\lstset{style=spin}&#xa;\begin{lstlisting}</xsl:text>
-        <xsl:value-of disable-output-escaping="yes" select="text()" />
+        <xsl:value-of select="text()" />
         <xsl:text>\end{lstlisting}&#xa;&#xa;</xsl:text>
     </xsl:template>
 
     <xsl:template match="div[@class='codeContent panelContent pdl']/pre">
         <xsl:text>\lstset{style=spin}&#xa;\begin{lstlisting}</xsl:text>
-        <xsl:value-of disable-output-escaping="yes" select="text()" />
+        <xsl:value-of select="text()" />
         <xsl:text>\end{lstlisting}&#xa;&#xa;</xsl:text>
     </xsl:template>
 
@@ -320,9 +354,6 @@
     <xsl:template match="div[@class='codeContent panelContent pdl']"><xsl:apply-templates /></xsl:template>
 
     <!-- Custom code boxes -->
-
-    <xsl:template match="pre[@class='spin']/pre"><xsl:apply-templates select="node()" /></xsl:template>
-    <xsl:template match="pre[@class='pasm']/pre"><xsl:apply-templates select="node()" /></xsl:template>
 
     <xsl:template match="pre[@class='spin']">
         <xsl:text>\lstset{style=spin}&#xa;\begin{lstlisting}</xsl:text>
@@ -432,6 +463,9 @@
     <!-- Miscellaneous stuff -->
 
     <xsl:template match="span">
+        <xsl:apply-templates select="node()" />
+    </xsl:template>
+    <xsl:template match="div[not(@*)]">
         <xsl:apply-templates select="node()" />
     </xsl:template>
     <xsl:template match="div[not(@*)]">

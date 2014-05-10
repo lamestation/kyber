@@ -97,6 +97,8 @@ else:
                 markdownblock = ''.join(markdownblock)
                 markdownblock = re.sub("\n.*\'\'[ ]?","\n",markdownblock)
 
+
+                # [^:<>!/\+=-]=[^:<>!/\-+=].*'\''.*' 
                 
                 content[label] += "\n"+markdown.markdown(markdownblock)
 

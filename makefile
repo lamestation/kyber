@@ -62,7 +62,10 @@ prepare_html: open_archive
 		../page.py $(INPUT_DIR)/$$f ; \
 		sed -f $(SED_DIR)/input.sed -i $(INPUT_DIR)/$$f ; \
 	done
-	cp -ur $(INPUT_DIR)/attachments $(HOME_DIR)
+	mkdir -p download $(INPUT_DIR)/download
+	ln -sf $(INPUT_DIR)/attachments download/attachments
+	ln -sf $(INPUT_DIR)/attachments attachments
+	ln -sf $(INPUT_DIR)/attachments $(INPUT_DIR)/download/attachments
 
 # Build single master page using space index page.
 assemble_singledocument: prepare_html
