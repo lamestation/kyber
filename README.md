@@ -27,8 +27,8 @@ While Kyber works with Confluence, it is **NOT** an add-on. We would like Kyber 
     sudo apt-get install xsltproc libxml2-utils tidy libsaxonb-java
 
     # LaTeX
-    sudo apt-get install texlive-latex-base texlive-latex-extra
-    sudo apt-get install texlive-latex-recommended lacheck
+    sudo apt-get install texlive-latex-base texlive-latex-extra texlive-fonts-extra
+    sudo apt-get install texlive-latex-recommended
 
 ## Usage
 

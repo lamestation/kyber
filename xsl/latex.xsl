@@ -372,96 +372,89 @@
 
 
 
-    <!-- Friendly box messages -->
+    <!-- Highlight Boxes -->
 
-    <xsl:template match="div[@class='aui-message problem shadowed information-macro']">
-        <xsl:text>\begin{minipage}{\textwidth}\begin{mdframed}[style=problem]&#xa;</xsl:text>
+    <xsl:template name="highlightbox">
+        <xsl:param name="style"/>
+        <xsl:text>\begin{minipage}{\textwidth}\begin{mdframed}[style=</xsl:text>
+        <xsl:value-of select="$style" />
+        <xsl:text>]&#xa;</xsl:text>
         <xsl:apply-templates select="node()" />
         <xsl:text>&#xa;\end{mdframed}\end{minipage}&#xa;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="div[@class='aui-message warning shadowed information-macro']">
-        <xsl:text>\begin{minipage}{\textwidth}\begin{mdframed}[style=warning]&#xa;</xsl:text>
-        <xsl:apply-templates select="node()" />
-        <xsl:text>&#xa;\end{mdframed}\end{minipage}&#xa;</xsl:text>
-    </xsl:template>
+    <xsl:template match="div[contains(@class,'information-macro')]">
+        <xsl:variable name="type">
+            <xsl:choose>
+                <xsl:when test="contains(@class,'problem')">problem</xsl:when>
+                <xsl:when test="contains(@class,'warning')">warning</xsl:when>
+                <xsl:when test="contains(@class,'hint')">hint</xsl:when>
+                <xsl:when test="contains(@class,'success')">success</xsl:when>
+            </xsl:choose>
+        </xsl:variable>
 
-    <xsl:template match="div[@class='aui-message hint shadowed information-macro']">
-        <xsl:text>\begin{minipage}{\textwidth}\begin{mdframed}[style=hint]&#xa;</xsl:text>
-        <xsl:apply-templates select="node()" />
-        <xsl:text>&#xa;\end{mdframed}\end{minipage}&#xa;</xsl:text>
+        <xsl:call-template name="highlightbox">
+            <xsl:with-param name="style" select="$type"/>
+        </xsl:call-template>
     </xsl:template>
-
-    <xsl:template match="div[@class='aui-message success shadowed information-macro']">
-        <xsl:text>\begin{minipage}{\textwidth}\begin{mdframed}[style=success]&#xa;</xsl:text>
-        <xsl:apply-templates select="node()" />
-        <xsl:text>&#xa;\end{mdframed}\end{minipage}&#xa;</xsl:text>
-    </xsl:template>
-
-    <xsl:template match="div[@class='aui-message problem shadowed information-macro']/span"></xsl:template>
-    <xsl:template match="div[@class='aui-message problem shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="div[@class='aui-message warning shadowed information-macro']/span"></xsl:template>
-    <xsl:template match="div[@class='aui-message warning shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="div[@class='aui-message hint shadowed information-macro']/span"></xsl:template>
-    <xsl:template match="div[@class='aui-message hint shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="div[@class='aui-message success shadowed information-macro']/span"></xsl:template>
-    <xsl:template match="div[@class='aui-message success shadowed information-macro']/div"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[contains(@class,'information-macro')]/span"></xsl:template>
+    <xsl:template match="div[contains(@class,'information-macro')]/div"><xsl:apply-templates /></xsl:template>
 
 
     <!-- Headers -->
 
     <xsl:template match="book_section"><xsl:apply-templates /></xsl:template>
 
-    <xsl:template match="h1">
-        <xsl:choose>
-            <xsl:when test="count(ancestor::book_section) = 0">
-                <xsl:text>&#xa;\newpage
+    <xsl:template match="h1|h2|h3|h4|h5">
+        <xsl:variable name="length" select="string-length(name())" />
+        <xsl:variable name="headlevel" select="number(substring(name(),$length))" />
+        <xsl:variable name="booklevel" select="count(ancestor::book_section)-1" />
+        <xsl:variable name="level" select="$headlevel + $booklevel - 1" />
+
+        <xsl:if test="$booklevel > 0">
+            <xsl:choose>
+                <xsl:when test="$level = 0">
+                    <xsl:text>&#xa;\newpage
 \AddToShipoutPicture*{\ChapterBackgroundPic}
 \part{</xsl:text>
-                <xsl:apply-templates select="node()" />
-                <xsl:text>}&#xa;\newpage&#xa;&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:when test="count(ancestor::book_section) = 1">
-                <xsl:text>&#xa;\newpage
+                    <xsl:apply-templates select="node()" />
+                    <xsl:text>}&#xa;\newpage&#xa;&#xa;</xsl:text>
+                </xsl:when>
+
+                <xsl:when test="$level = 1">
+                    <xsl:text>&#xa;\newpage
 \AddToShipoutPicture*{\ChapterBackgroundPic}
 \chapter{</xsl:text>
-                <xsl:apply-templates select="node()" />
-                <xsl:text>}&#xa;\newpage&#xa;&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:when test="count(ancestor::book_section) = 2">
-                <xsl:text>&#xa;\section{</xsl:text>
-                <xsl:apply-templates select="node()" />
-                <xsl:text>}&#xa;&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:when test="count(ancestor::book_section) = 3">
-                <xsl:text>&#xa;\subsection{</xsl:text>
-                <xsl:apply-templates select="node()" />
-                <xsl:text>}&#xa;&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:when test="count(ancestor::book_section) = 4">
-                <xsl:text>&#xa;\subsubsection{</xsl:text>
-                <xsl:apply-templates select="node()" />
-                <xsl:text>}&#xa;&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                EVERYTHING SUCKS<xsl:apply-templates />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
+                    <xsl:apply-templates select="node()" />
+                    <xsl:text>}&#xa;\newpage&#xa;&#xa;</xsl:text>
+                </xsl:when>
 
-    <!-- This header support needs to be fleshed out -->
-    <xsl:template match="h2|h3">
-        <xsl:text>&#xa;\subsection{</xsl:text>
-        <xsl:apply-templates select="node()" />
-        <xsl:text>}&#xa;&#xa;</xsl:text>
-    </xsl:template>
+                <xsl:when test="$level = 2">
+                    <xsl:text>&#xa;\section{</xsl:text>
+                    <xsl:apply-templates select="node()" />
+                    <xsl:text>}&#xa;&#xa;</xsl:text>
+                </xsl:when>
 
-    <xsl:template match="h4|h5">
-        <xsl:text>&#xa;\subsubsection{</xsl:text>
-        <xsl:apply-templates select="node()" />
-        <xsl:text>}&#xa;&#xa;</xsl:text>
-    </xsl:template>
+                <xsl:when test="$level = 3">
+                    <xsl:text>&#xa;\subsection{</xsl:text>
+                    <xsl:apply-templates select="node()" />
+                    <xsl:text>}&#xa;&#xa;</xsl:text>
+                </xsl:when>
 
+                <xsl:otherwise>
+                    <xsl:text>&#xa;\subsubsection{</xsl:text>
+                    <xsl:apply-templates select="node()" />
+                    <xsl:text>}&#xa;&#xa;</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+
+        <xsl:text>BLAH</xsl:text>
+        <xsl:value-of select="$headlevel"/>
+        <xsl:value-of select="$booklevel"/>
+        <xsl:value-of select="$level"/>
+
+    </xsl:template>
 
     <!-- Miscellaneous stuff -->
 
