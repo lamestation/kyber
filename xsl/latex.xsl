@@ -26,9 +26,7 @@
         ">
         -->
     <xsl:template match="a">
-        <xsl:variable name="step1" select="replace(text(),'_','\\_')"/>
-        <xsl:variable name="step2" select="replace($step1,'&amp;','\\&amp;')"/>
-        <xsl:value-of select="replace($step2,'#','\\#')"/>
+        <xsl:value-of select="replace(text(),'&amp;','\\&amp;')"/>
     </xsl:template>
 
 
@@ -274,9 +272,13 @@
 
     <xsl:template match="map"></xsl:template>
 
-    <xsl:template match="div[@id='main-content' or @class='wiki-content group']">
+    <xsl:template match="div[@id='main-content']">
         <xsl:apply-templates select="node()" />
     </xsl:template>
+    <xsl:template match="div[@class='wiki-content group']">
+        <xsl:apply-templates select="node()" />
+    </xsl:template>
+
     <xsl:template match="div[@class='columnMacro' or @class='sectionMacro' or @class='sectionMacroRow' or @class='sectionColumnWrapper']">
         <xsl:apply-templates select="node()" />
     </xsl:template>
@@ -355,15 +357,16 @@
 
     <!-- Custom code boxes -->
 
+
     <xsl:template match="pre[@class='spin']">
         <xsl:text>\lstset{style=spin}&#xa;\begin{lstlisting}</xsl:text>
-        <xsl:copy-of select="pre/text()" />
+        <xsl:copy-of select="text()" />
         <xsl:text>\end{lstlisting}&#xa;&#xa;</xsl:text>
     </xsl:template>
 
     <xsl:template match="pre[@class='pasm']">
         <xsl:text>\lstset{style=pasm}&#xa;\begin{lstlisting}</xsl:text>
-        <xsl:copy-of select="pre/text()" />
+        <xsl:copy-of select="text()" />
         <xsl:text>\end{lstlisting}&#xa;&#xa;</xsl:text>
     </xsl:template>
 

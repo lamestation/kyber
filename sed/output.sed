@@ -2,7 +2,6 @@
 #s/&/\\\&/g      # Escape ampersand
 s/\$/\\$/g      # Escape dollar sign
 s/#/\\#/g        # Escape hash
-s/_/\_/g        # Escape hash
 
 s/[ \t]*\././g  # Remove leading space to period
 s/[ \t]*\,/,/g  # Remove leading space to period
@@ -18,7 +17,7 @@ s/&lt;/</g
 
 # Fix underscores in titles
 #/\\section/s/_/\\_/g
-s/_/\\_/g
 s/%/\\%/g
 s/<div>//g
 s/<\/div>//g
+s/_/\\_/g        # Escape underscore
