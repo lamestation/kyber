@@ -63,6 +63,7 @@ prepare_html: open_archive
 		sed -f $(SED_DIR)/input.sed -i $(INPUT_DIR)/$$f ; \
 	done
 	mkdir -p download $(INPUT_DIR)/download
+	rm $(HOME_DIR)/attachments
 	ln -sf $(INPUT_DIR)/attachments download/attachments
 	ln -sf $(INPUT_DIR)/attachments attachments
 	ln -sf $(INPUT_DIR)/attachments $(INPUT_DIR)/download/attachments
@@ -93,15 +94,10 @@ build_latex: assemble_singledocument
 	cp -f $(TEX_DIR)/header.tex $(OUTPUT_TEX)
 	cat $(INTER_XML) \
 		| tidy -xml -indent -utf8 > $(INTER_XML)2
-	sed -f $(SED_DIR)/intermediate.sed -i $(INTER_XML)2
 	java net.sf.saxon.Transform -xsl:$(STYLE_DIR)/latex.xsl -s:$(INTER_XML)2 > tmp.1
 	sed -f $(SED_DIR)/output.sed tmp.1 >> $(OUTPUT_TEX)
 	rm tmp.1
 	cat $(TEX_DIR)/footer.tex >> $(OUTPUT_TEX)
-
-# No longer supported
-build_xslfo:
-	fop -xml $(INTER_XML) -xsl $(STYLE_DIR)/document.xsl -foout $(INPUT_DIR)/$(OUTPUT_NAME).fo
 
 # Run, rerun (build cross-references), display
 # If it works the first time, it will work the second time.

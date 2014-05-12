@@ -1,10 +1,5 @@
-#s/\$/\\$/g      # Escape dollar sign
-#s/&/\\\&/g      # Escape ampersand
-
 s/[ \t]*\././g  # Remove leading space to period
 s/[ \t]*\,/,/g  # Remove leading space to period
-
-# Fix underscores in titles
 
 # # $ % & ~ _ ^ \ { }
 s/#/\\#/g
