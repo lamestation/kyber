@@ -3,6 +3,23 @@
 \usepackage{listings}
 \usepackage{courier}
 
+\lstset{%
+    sensitive=false,
+    showtabs=false,
+    showspaces=false,
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=true,
+    basicstyle=\footnotesize\ttfamily,
+    numbers=none,
+    frame=single,
+    framesep=0.10in,
+    xleftmargin=0.10in,
+    xrightmargin=0.10in,
+    aboveskip=5pt,
+    belowskip=5pt
+}
+
 \lstdefinelanguage{Spin}{
     classoffset=0,
     morekeywords={con, var, obj, pub, pri, dat},
@@ -37,72 +54,24 @@
     morecomment=[l]{'},
     morecomment=[n]{\{}{\}},
     commentstyle=\color{spin_comment},
-    numberstyle=\color{spin_num},
-    sensitive=false,
-    showtabs=false,
-    showspaces=false,
-    showstringspaces=false,
-    breaklines=true,
-    breakatwhitespace=true,
-    basicstyle=\footnotesize\ttfamily,
-    numbers=none,
-    frame=single,
-    framesep=0.10in,
-    xleftmargin=0.10in,
-    xrightmargin=0.10in,
-    aboveskip=5pt,
-    belowskip=5pt
+    numberstyle=\color{spin_num}
 }
-
 
 \lstdefinestyle{C++}{
-    language=C++,                % choose the language of the code
-    basicstyle=\small,       % the size of the fonts that are used for the code
-    numbers=left,                   % where to put the line-numbers
-    numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
-    stepnumber=1,                   % the step between two line-numbers. If it's 1 each line 
-    numbersep=10pt,                  % how far the line-numbers are from the code
-    showspaces=false,               % show spaces adding particular underscores
-    showstringspaces=false,         % underline spaces within strings
-    showtabs=false,                 % show tabs within strings adding particular underscores
-    frame=none,	                % adds a frame around the code
-    tabsize=1,	                % sets default tabsize to 2 spaces
-    captionpos=t,                   % sets the caption-position to bottom
-    breaklines=true,                % sets automatic line breaking
-    breakatwhitespace=true,        % sets if automatic breaks should only happen at whitespace
-    backgroundcolor=\color{white},
-    keywordstyle={\color{black} \bf}
+    language=C++,
+    backgroundcolor=\color{white}
 }
-
 \lstdefinestyle{spin}{
     language=Spin,
     backgroundcolor=\color{spin_pub}
 }
-
-
 \lstdefinestyle{pasm}{
     language=Spin,
     backgroundcolor=\color{spin_dat}
 }
-
-
 \lstdefinestyle{plain}{
     language={},
-    basicstyle=\small,
-    numbers=left,
-    numberstyle=\footnotesize,
-    stepnumber=1,             
-    numbersep=10pt,           
-    showspaces=false,         
-    showstringspaces=false,   
-    showtabs=false,           
-    frame=none,	              
-    tabsize=1,	              
-    captionpos=t,             
-    breaklines=true,          
-    breakatwhitespace=true,   
-    backgroundcolor=\color{lightgray},
-    keywordstyle={\color{black} \bf}
+    backgroundcolor=\color{lightgray}
 }
 
 

@@ -334,18 +334,11 @@
         <xsl:param name="style"/>
         <xsl:text>\lstset{style=</xsl:text>
         <xsl:value-of select="$style" />
-        <xsl:text>}&#xa;\begin{lstlisting}</xsl:text>
-        <xsl:choose>
-            <xsl:when test="pre">
-                <xsl:call-template name="escaping">
-                    <xsl:with-param name="input" select="string-join(pre/text(),'')"/>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="node()" />
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>\end{lstlisting}&#xa;&#xa;</xsl:text>
+        <xsl:text>}&#xa;\begin{lstlisting}&#xa;</xsl:text>
+        <xsl:call-template name="escaping">
+            <xsl:with-param name="input" select="string-join(*/text(),'')"/>
+        </xsl:call-template>
+        <xsl:text>&#xa;\end{lstlisting}&#xa;&#xa;</xsl:text>
     </xsl:template>
 
 
@@ -366,15 +359,16 @@
     <xsl:template match="pre[@class='latex']">
         <xsl:text>\[ </xsl:text>
         <xsl:call-template name="escaping">
-            <xsl:with-param name="input" select="string-join(pre/text(),'')"/>
+            <xsl:with-param name="input" select="string-join(pre/text()|p/text(),'')"/>
         </xsl:call-template>
         <xsl:text> \]&#xa;</xsl:text>
     </xsl:template>
-    <xsl:template match="pre[@class='latex']/p">
-        <xsl:apply-templates select="node()" />
+
+    <xsl:template match="pre[not(@*)]">
+        <xsl:call-template name="escaping">
+            <xsl:with-param name="input" select="string-join(text(),'')"/>
+        </xsl:call-template>
     </xsl:template>
-
-
 
     <!-- Highlight Boxes -->
 
@@ -405,12 +399,12 @@
     <xsl:template match="div[contains(@class,'information-macro')]/div"><xsl:apply-templates /></xsl:template>
 
 
-    <xsl:template match="div[@class='panel']">
+    <xsl:template match="div[@class='panel']|div[@class='preformatted panel']">
         <xsl:call-template name="highlightbox">
-            <xsl:with-param name="style" select="panel"/>
+            <xsl:with-param name="style">panel</xsl:with-param>
         </xsl:call-template>
     </xsl:template>
-    <xsl:template match="div[@class='panelContent']"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[contains(@class,'panelContent')]"><xsl:apply-templates /></xsl:template>
 
 
     <!-- Headers -->
