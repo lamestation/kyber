@@ -2,6 +2,7 @@
 \usepackage[framemethod=tikz]{mdframed}
 
 \mdfsetup{%
+    backgroundcolor=darkgray,
     fontcolor=white,
     middlelinewidth=0pt,
     roundcorner=0pt,
@@ -54,4 +55,9 @@
     firstextra={
         \node[inner sep=0pt,anchor=north west,xshift=10pt,yshift=-20pt] at (P-|O) {\includegraphics[width=1cm,height=1cm]{graphics/ico-power.png}};
     }
+}
+
+\mdfdefinestyle{panel}{
+    backgroundcolor=gray,
+    fontcolor=white
 }

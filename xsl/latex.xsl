@@ -29,14 +29,10 @@
         <xsl:value-of select="replace(text(),'&amp;','\\&amp;')"/>
     </xsl:template>
 
-
-
     <!-- Open up document -->
 
-    <xsl:template match="html"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="head"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="html|head|body"><xsl:apply-templates /></xsl:template>
     <xsl:template match="title"></xsl:template>
-    <xsl:template match="body"><xsl:apply-templates /></xsl:template>
 
 
     <!-- Tables -->
@@ -60,8 +56,8 @@
         <xsl:text>\end{longtabu}&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="thead"><xsl:apply-templates select="node()" /></xsl:template>
-    <xsl:template match="tbody"><xsl:apply-templates select="node()" /></xsl:template>
+    <xsl:template match="thead"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="tbody"><xsl:apply-templates /></xsl:template>
 
 
     <xsl:template match="tr">
@@ -79,7 +75,7 @@
                 <xsl:text>px]{</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>  \includegraphics[width = 1in]{</xsl:text>
+                <xsl:text>  \includegraphics[scale=0.5]{</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
 
@@ -103,6 +99,10 @@
 
 
     <!-- Table cells -->
+    <xsl:template match="td/p|th/p">
+        <xsl:apply-templates />
+        <xsl:text> \\ </xsl:text>
+    </xsl:template>
     <xsl:template match="td|th">
 
         <!-- Check if multicolumn -->
@@ -110,12 +110,14 @@
             <xsl:when test="@colspan and @colspan &gt; 1">
                 <xsl:text>\multicolumn{</xsl:text>
                 <xsl:value-of select="@colspan" />
-                <xsl:text>}{l}{</xsl:text>
+                <xsl:text>}{l}{\scell{</xsl:text>
                 <xsl:apply-templates select="node()" />
-                <xsl:text>} </xsl:text>
+                <xsl:text>}} </xsl:text>
             </xsl:when>
             <xsl:otherwise>
+                <xsl:text>\scell{</xsl:text>
                 <xsl:apply-templates select="node()" />
+                <xsl:text>} </xsl:text>
             </xsl:otherwise>
         </xsl:choose>
 
@@ -145,10 +147,6 @@
         <xsl:apply-templates select="node()" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
-    <!--    <xsl:template match="a">
-        <xsl:apply-templates select="node()" />
-    </xsl:template>
-    -->
     <xsl:template match="strong|b">
         <xsl:text> \textbf{</xsl:text>
         <xsl:apply-templates select="node()" />
@@ -169,13 +167,8 @@
         <xsl:apply-templates />
         <xsl:text>} </xsl:text>
     </xsl:template>
-    <!--
-    <xsl:template match="code">
-        <xsl:text> \texttt{</xsl:text>
-        <xsl:apply-templates />
-        <xsl:text>} </xsl:text>
-    </xsl:template>
-    -->
+
+    <!-- code with auto-indexing -->
 
     <xsl:template match="code">
         <xsl:text> \texttt{</xsl:text>
@@ -223,7 +216,7 @@
                 <xsl:text>px]{</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>  \includegraphics[width = 3in]{</xsl:text>
+                <xsl:text>  \includegraphics[scale = 0.5]{</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
 
@@ -297,16 +290,6 @@
     <xsl:template match="div[@class='plugin_pagetree']"></xsl:template>
 
     <!-- LaTeX Features -->
-
-    <xsl:template match="pre[@class='latex']">
-        <xsl:text>\[ </xsl:text>
-        <xsl:apply-templates select="node()" />
-        <xsl:text> \]&#xa;</xsl:text>
-    </xsl:template>
-    <xsl:template match="pre[@class='latex']/p">
-        <xsl:apply-templates select="node()" />
-    </xsl:template>
-
     <xsl:template match="div[@class='figure']">
         <xsl:text>&#xa;\begin{figure}[!htb]&#xa;</xsl:text>
         <xsl:text>\centering&#xa;</xsl:text>
@@ -323,51 +306,61 @@
         <xsl:text>&#xa;&#xa;</xsl:text>
     </xsl:template>
 
-    <!-- Panel boxes -->
-
-    <xsl:template match="div[@class='panelContent']"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="div[@class='panel']">
-        <xsl:text>&#xa;\begin{mdframed}[style=mystyle]</xsl:text>
-        <xsl:apply-templates select="node()" />
-        <xsl:text>\end{mdframed}&#xa;&#xa;</xsl:text>
-    </xsl:template>
-
     <!-- Code boxes -->
 
     <xsl:template match="span[@class='expand-control-text']"></xsl:template>
 
     <xsl:template match="div[@class='code panel pdl']"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="div[@class='codeHeader panelHeader pdl hide-border-bottom']"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="div[@class='codeHeader panelHeader pdl']"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[contains(@class,'codeHeader')]"><xsl:apply-templates /></xsl:template>
 
-    <xsl:template match="div[@class='codeContent panelContent pdl hide-toolbar']/pre">
-        <xsl:text>\lstset{style=spin}&#xa;\begin{lstlisting}</xsl:text>
-        <xsl:value-of select="text()" />
+    <xsl:template match="div[contains(@class,'codeContent')]">
+        <xsl:call-template name="codebox">
+            <xsl:with-param name="style" select="plain"/>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template match="div[contains(@class,'codeContent')]/pre"><xsl:apply-templates /></xsl:template>
+
+    <!-- Code Boxes -->
+
+    <xsl:template name="codebox">
+        <xsl:param name="style"/>
+        <xsl:text>\lstset{style=</xsl:text>
+        <xsl:value-of select="$style" />
+        <xsl:text>}&#xa;\begin{lstlisting}</xsl:text>
+        <xsl:choose>
+            <xsl:when test="pre">
+                <xsl:copy-of select="pre/text()" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="node()" />
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:text>\end{lstlisting}&#xa;&#xa;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="div[@class='codeContent panelContent pdl']/pre">
-        <xsl:text>\lstset{style=spin}&#xa;\begin{lstlisting}</xsl:text>
-        <xsl:value-of select="text()" />
-        <xsl:text>\end{lstlisting}&#xa;&#xa;</xsl:text>
+
+    <xsl:template match="pre[@class='spin']|pre[@class='pasm']">
+        <xsl:variable name="type">
+            <xsl:choose>
+                <xsl:when test="contains(@class,'spin')">spin</xsl:when>
+                <xsl:when test="contains(@class,'pasm')">pasm</xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:call-template name="codebox">
+            <xsl:with-param name="style" select="$type"/>
+        </xsl:call-template>
     </xsl:template>
 
-    <xsl:template match="div[@class='codeContent panelContent pdl hide-toolbar']"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="div[@class='codeContent panelContent pdl']"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="pre/pre"><xsl:apply-templates /></xsl:template>
 
-    <!-- Custom code boxes -->
-
-
-    <xsl:template match="pre[@class='spin']">
-        <xsl:text>\lstset{style=spin}&#xa;\begin{lstlisting}</xsl:text>
-        <xsl:copy-of select="text()" />
-        <xsl:text>\end{lstlisting}&#xa;&#xa;</xsl:text>
+    <xsl:template match="pre[@class='latex']">
+        <xsl:text>\[ </xsl:text>
+        <xsl:apply-templates select="node()" />
+        <xsl:text> \]&#xa;</xsl:text>
     </xsl:template>
-
-    <xsl:template match="pre[@class='pasm']">
-        <xsl:text>\lstset{style=pasm}&#xa;\begin{lstlisting}</xsl:text>
-        <xsl:copy-of select="text()" />
-        <xsl:text>\end{lstlisting}&#xa;&#xa;</xsl:text>
+    <xsl:template match="pre[@class='latex']/p">
+        <xsl:apply-templates select="node()" />
     </xsl:template>
 
 
@@ -401,15 +394,23 @@
     <xsl:template match="div[contains(@class,'information-macro')]/div"><xsl:apply-templates /></xsl:template>
 
 
+    <xsl:template match="div[@class='panel']">
+        <xsl:call-template name="highlightbox">
+            <xsl:with-param name="style" select="panel"/>
+        </xsl:call-template>
+    </xsl:template>
+    <xsl:template match="div[@class='panelContent']"><xsl:apply-templates /></xsl:template>
+
+
     <!-- Headers -->
 
-    <xsl:template match="book_section"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="booksection"><xsl:apply-templates /></xsl:template>
 
-    <xsl:template match="h1|h2|h3|h4|h5">
+    <xsl:template match="h0|h1|h2|h3|h4|h5">
         <xsl:variable name="length" select="string-length(name())" />
         <xsl:variable name="headlevel" select="number(substring(name(),$length))" />
-        <xsl:variable name="booklevel" select="count(ancestor::book_section)-1" />
-        <xsl:variable name="level" select="$headlevel + $booklevel - 1" />
+        <xsl:variable name="booklevel" select="count(ancestor::booksection)-1" />
+        <xsl:variable name="level" select="$headlevel + $booklevel" />
 
         <xsl:if test="$booklevel > 0">
             <xsl:choose>
@@ -448,12 +449,6 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
-
-        <xsl:text>BLAH</xsl:text>
-        <xsl:value-of select="$headlevel"/>
-        <xsl:value-of select="$booklevel"/>
-        <xsl:value-of select="$level"/>
-
     </xsl:template>
 
     <!-- Miscellaneous stuff -->

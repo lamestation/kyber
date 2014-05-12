@@ -42,9 +42,9 @@
     <xsl:template match="br"></xsl:template>
 
     <xsl:template match="ul">
-        <book_section>
+        <booksection>
             <xsl:apply-templates select="*|text()"/>
-        </book_section>
+        </booksection>
     </xsl:template>
 
     <xsl:template match="ul/li">
@@ -54,7 +54,7 @@
     <xsl:template match="ul/li/a">
         <xsl:variable name="pageLink" select="@href"/>
         <xsl:variable name="pageName" select="text()"/>
-        <h1><xsl:value-of select="$pageName" /></h1>
+        <h0><xsl:value-of select="$pageName" /></h0>
         <xsl:copy-of select="document($pageLink)//div[@id='main-content']" />
     </xsl:template>
 </xsl:transform>
