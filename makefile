@@ -115,4 +115,5 @@ view_pdf: build_pdf
 
 
 clean:
+	rm $(HOME_DIR)/attachments
 	rm -rf $(HOME_DIR)/attachments/

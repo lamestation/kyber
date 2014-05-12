@@ -17,14 +17,7 @@
     <xsl:template match="*/text()[not(normalize-space())]" />
 
 
-
     <!-- Character escaping -->
-    <!--
-    <xsl:template match=
-        "contains('|code|',
-        concat('|', name(), '|'))
-        ">
-        -->
     <xsl:template match="a">
         <xsl:value-of select="replace(text(),'&amp;','\\&amp;')"/>
     </xsl:template>
@@ -48,7 +41,7 @@
         <!-- count number of columns -->
         <xsl:for-each select="for $i in 1 to count(./tbody[1]/tr[1]/th|./tbody[1]/tr[1]/td|./thead[1]/tr[1]/th|./thead[1]/tr[1]/td) return $i">
             <xsl:text>l | </xsl:text>
-         </xsl:for-each>
+        </xsl:for-each>
 
         <xsl:text>}&#10;</xsl:text>
         <xsl:text>\hline&#10;</xsl:text>
@@ -315,13 +308,27 @@
 
     <xsl:template match="div[contains(@class,'codeContent')]">
         <xsl:call-template name="codebox">
-            <xsl:with-param name="style" select="plain"/>
+            <xsl:with-param name="style">plain</xsl:with-param>
         </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="div[contains(@class,'codeContent')]/pre"><xsl:apply-templates /></xsl:template>
 
     <!-- Code Boxes -->
+
+    <xsl:template name="escaping">
+        <xsl:param name="input"/>
+        <xsl:variable name="char" select="replace($input,'\$',   '((-36-))')" />
+        <xsl:variable name="char" select="replace($char, '#',    '((-35-))')" />
+        <xsl:variable name="char" select="replace($char, '&amp;','((-38-))')" />
+        <xsl:variable name="char" select="replace($char, '\\',   '((-92-))')" />
+        <xsl:variable name="char" select="replace($char, '\^',   '((-94-))')" />
+        <xsl:variable name="char" select="replace($char, '_',    '((-95-))')" />
+        <xsl:variable name="char" select="replace($char, '\{',   '((-123-))')" />
+        <xsl:variable name="char" select="replace($char, '\}',   '((-125-))')" />
+        <xsl:variable name="char" select="replace($char, '~',    '((-126-))')" />
+        <xsl:value-of select="$char" />
+    </xsl:template>
 
     <xsl:template name="codebox">
         <xsl:param name="style"/>
@@ -330,7 +337,9 @@
         <xsl:text>}&#xa;\begin{lstlisting}</xsl:text>
         <xsl:choose>
             <xsl:when test="pre">
-                <xsl:copy-of select="pre/text()" />
+                <xsl:call-template name="escaping">
+                    <xsl:with-param name="input" select="string-join(pre/text(),'')"/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="node()" />
@@ -356,7 +365,9 @@
 
     <xsl:template match="pre[@class='latex']">
         <xsl:text>\[ </xsl:text>
-        <xsl:apply-templates select="node()" />
+        <xsl:call-template name="escaping">
+            <xsl:with-param name="input" select="string-join(pre/text(),'')"/>
+        </xsl:call-template>
         <xsl:text> \]&#xa;</xsl:text>
     </xsl:template>
     <xsl:template match="pre[@class='latex']/p">
@@ -406,7 +417,7 @@
 
     <xsl:template match="booksection"><xsl:apply-templates /></xsl:template>
 
-    <xsl:template match="h0|h1|h2|h3|h4|h5">
+    <xsl:template match="h0|h1|h2|h3|h4|h5|h6">
         <xsl:variable name="length" select="string-length(name())" />
         <xsl:variable name="headlevel" select="number(substring(name(),$length))" />
         <xsl:variable name="booklevel" select="count(ancestor::booksection)-1" />
@@ -416,16 +427,16 @@
             <xsl:choose>
                 <xsl:when test="$level = 0">
                     <xsl:text>&#xa;\newpage
-\AddToShipoutPicture*{\ChapterBackgroundPic}
-\part{</xsl:text>
+                        \AddToShipoutPicture*{\ChapterBackgroundPic}
+                        \part{</xsl:text>
                     <xsl:apply-templates select="node()" />
                     <xsl:text>}&#xa;\newpage&#xa;&#xa;</xsl:text>
                 </xsl:when>
 
                 <xsl:when test="$level = 1">
                     <xsl:text>&#xa;\newpage
-\AddToShipoutPicture*{\ChapterBackgroundPic}
-\chapter{</xsl:text>
+                        \AddToShipoutPicture*{\ChapterBackgroundPic}
+                        \chapter{</xsl:text>
                     <xsl:apply-templates select="node()" />
                     <xsl:text>}&#xa;\newpage&#xa;&#xa;</xsl:text>
                 </xsl:when>
@@ -453,17 +464,10 @@
 
     <!-- Miscellaneous stuff -->
 
-    <xsl:template match="span">
-        <xsl:apply-templates select="node()" />
+    <xsl:template match="div[not(@class)]|span">
+        <xsl:apply-templates />
     </xsl:template>
-    <xsl:template match="div[not(@*)]">
-        <xsl:apply-templates select="node()" />
-    </xsl:template>
-    <xsl:template match="div[not(@*)]">
-        <xsl:apply-templates select="node()" />
-    </xsl:template>
-    <xsl:template match="br"></xsl:template>
-    <xsl:template match="style"></xsl:template>
+    <xsl:template match="br|style"></xsl:template>
 
     <!-- If nothing else, just copy it -->
 
