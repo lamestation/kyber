@@ -164,9 +164,9 @@
     <!-- code with auto-indexing -->
 
     <xsl:template match="code">
-        <xsl:text> \texttt{</xsl:text>
+        <xsl:text> \texttt{\path{</xsl:text>
         <xsl:apply-templates />
-        <xsl:text>} \index{</xsl:text>
+        <xsl:text>}} \index{</xsl:text>
         <xsl:apply-templates />
         <xsl:text>} </xsl:text>
     </xsl:template>
@@ -302,10 +302,8 @@
     <!-- Code boxes -->
 
     <xsl:template match="span[@class='expand-control-text']"></xsl:template>
-
-    <xsl:template match="div[@class='code panel pdl']"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="div[contains(@class,'codeHeader')]"><xsl:apply-templates /></xsl:template>
-
+    <xsl:template match="div[contains(@class,'code panel')]"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[contains(@class,'codeHeader')]"></xsl:template>
     <xsl:template match="div[contains(@class,'codeContent')]">
         <xsl:call-template name="codebox">
             <xsl:with-param name="style">plain</xsl:with-param>
@@ -334,7 +332,7 @@
         <xsl:param name="style"/>
         <xsl:text>\lstset{style=</xsl:text>
         <xsl:value-of select="$style" />
-        <xsl:text>}&#xa;\begin{lstlisting}&#xa;</xsl:text>
+        <xsl:text>}&#xa;\begin{lstlisting}</xsl:text>
         <xsl:call-template name="escaping">
             <xsl:with-param name="input" select="string-join(*/text(),'')"/>
         </xsl:call-template>
@@ -404,7 +402,7 @@
             <xsl:with-param name="style">panel</xsl:with-param>
         </xsl:call-template>
     </xsl:template>
-    <xsl:template match="div[contains(@class,'panelContent')]"><xsl:apply-templates /></xsl:template>
+    <xsl:template match="div[@class='panelContent']"><xsl:apply-templates /></xsl:template>
 
 
     <!-- Headers -->

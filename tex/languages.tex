@@ -10,12 +10,13 @@
     showstringspaces=false,
     breaklines=true,
     breakatwhitespace=true,
-    basicstyle=\footnotesize\ttfamily,
+    basicstyle=\ttfamily,
+    backgroundcolor=\color{white},
     numbers=none,
-    frame=single,
-    framesep=0.10in,
-    xleftmargin=0.10in,
-    xrightmargin=0.10in,
+    frame=none,
+    framesep=0.2in,
+    xleftmargin=0.2in,
+    xrightmargin=0.2in,
     aboveskip=5pt,
     belowskip=5pt
 }
@@ -31,10 +32,10 @@
     morekeywords={dira, dirb, ina, inb, outa, outb, cnt, ctra, ctrb, frqa, frqb, phsa, phsb, vcfg, vscl, par, spr},
     morekeywords={true, false, posx, negx, pi, result},
     morekeywords={org, fit, res},
-    keywordstyle={\color{spin_operator} \bf},
+    keywordstyle={\color{darkblue} \bf},
     classoffset=1,
     morekeywords={byte, word, long},
-    keywordstyle={\color{spin_pub} \bf},
+    keywordstyle={\color{darkblue} \bf},
     classoffset=2,
     morekeywords={clkset, cogid, coginit, cogstop},
     morekeywords={locknew, lockret, lockclr, lockset, waitcnt, waitpeq, waitpne, waitvid},
@@ -42,36 +43,32 @@
     morekeywords={call, djnz, jmp, jmpret, tjnz, tjz, ret, nr, wr, wc, wz},
     morekeywords={rdbyte, rdword, rdlong, wrbyte, wrword, wrlong},
     morekeywords={abs, absneg, neg, negc, negnc, negz, negnz, min, mins, max, maxs, add, addabs, adds, addx, addsx, sub, subabs, subs, subx, subsx, sumc, sumnc, sumz, sumnz, mul, muls, and, andn, or, xor, ones, enc, rcl, rcr, rev, rol, ror, shl, shr, sar, cmp, cmps, cmpx, cmpsx, cmpsub, test, testn, mov, movs, movd, movi, muxc, muxnc, muxz, muxnz, hubop, nop},
-    keywordstyle={\color{spin_operator} \bf},  
+    keywordstyle={\color{darkblue} \bf},  
     classoffset=3,
     morekeywords={if, elseif, ifnot, elseifnot, else, case, other, repeat, from, to, step, until, while, next, quit, return, abort},
-    keywordstyle={\color{spin_ctrl} \bf},  
+    keywordstyle={\color{darkblue} \bf},  
     classoffset=4,
     alsoletter={+,-,=,:,\^,|,~,?,<,>,!,@,\#},
     morekeywords={+,-,--,++,\^\^,||,~,~~,?,|<,>|,!,NOT,@,@@,=,:=,+=,-=,*=,**=,*,**,/,//,/=,//=,\#>,\#>=,<\#,<\#=,~>,~>=,<<,<<=,>>,>>=,<-,<-=,->,->=,><,><=,\&,\&=,|,|=,\^,\^=,AND,AND=,OR,OR=,==,===,<>,<>=,<,<=,>,>=,=<,=<=,=>,=>=},
-    keywordstyle={\color{spin_operator} \bf},  
+    keywordstyle={\color{darkblue} \bf},  
     classoffset=0,
     morecomment=[l]{'},
     morecomment=[n]{\{}{\}},
-    commentstyle=\color{spin_comment},
-    numberstyle=\color{spin_num}
+    commentstyle=\color{green},
+    numberstyle=\color{pink}
 }
 
 \lstdefinestyle{C++}{
-    language=C++,
-    backgroundcolor=\color{white}
+    language=C++
 }
 \lstdefinestyle{spin}{
-    language=Spin,
-    backgroundcolor=\color{spin_pub}
+    language=Spin
 }
 \lstdefinestyle{pasm}{
-    language=Spin,
-    backgroundcolor=\color{spin_dat}
+    language=Spin
 }
 \lstdefinestyle{plain}{
-    language={},
-    backgroundcolor=\color{lightgray}
+    language=
 }
 
 
