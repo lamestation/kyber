@@ -65,7 +65,7 @@
             <xsl:when test="@width">
                 <xsl:text> \vspace{0cm}\includegraphics[width = </xsl:text>
                 <xsl:value-of select="number(@width) div 2" />
-                <xsl:text>px]{</xsl:text>
+                <xsl:text>bp]{</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>  \includegraphics[scale=0.5]{</xsl:text>
@@ -206,7 +206,7 @@
             <xsl:when test="@width">
                 <xsl:text>  \includegraphics[width = </xsl:text>
                 <xsl:value-of select="number(@width) div 2" />
-                <xsl:text>px]{</xsl:text>
+                <xsl:text>bp]{</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>  \includegraphics[scale = 0.5]{</xsl:text>
@@ -258,11 +258,14 @@
 
     <xsl:template match="map"></xsl:template>
 
-    <xsl:template match="div[@id='main-content']">
-        <xsl:apply-templates select="node()" />
-    </xsl:template>
-    <xsl:template match="div[@class='wiki-content group']">
-        <xsl:apply-templates select="node()" />
+    <xsl:template match="div[@id='main-content' or @class='wiki-content group']">
+        <xsl:choose>
+            <xsl:when test="count(ancestor::booksection) &gt; 1">
+                <xsl:apply-templates select="node()" />
+            </xsl:when>
+            <xsl:otherwise>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="div[@class='columnMacro' or @class='sectionMacro' or @class='sectionMacroRow' or @class='sectionColumnWrapper']">
@@ -418,19 +421,31 @@
         <xsl:if test="$booklevel > 0">
             <xsl:choose>
                 <xsl:when test="$level = 0">
-                    <xsl:text>&#xa;\newpage
-                        \AddToShipoutPicture*{\ChapterBackgroundPic}
-                        \part{</xsl:text>
-                    <xsl:apply-templates select="node()" />
-                    <xsl:text>}&#xa;\newpage&#xa;&#xa;</xsl:text>
+                    <xsl:choose>
+                        <xsl:when test="text() = 'Copyright'">
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>&#xa;\newpage
+                                \AddToShipoutPicture*{\ChapterBackgroundPic}
+                                \part{</xsl:text>
+                            <xsl:apply-templates select="node()" />
+                            <xsl:text>}&#xa;\newpage&#xa;&#xa;</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:when>
 
                 <xsl:when test="$level = 1">
-                    <xsl:text>&#xa;\newpage
-                        \AddToShipoutPicture*{\ChapterBackgroundPic}
-                        \chapter{</xsl:text>
-                    <xsl:apply-templates select="node()" />
-                    <xsl:text>}&#xa;\newpage&#xa;&#xa;</xsl:text>
+                    <xsl:choose>
+                        <xsl:when test="text() = 'Copyright'">
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>&#xa;\newpage
+                                \AddToShipoutPicture*{\ChapterBackgroundPic}
+                                \chapter{</xsl:text>
+                            <xsl:apply-templates select="node()" />
+                            <xsl:text>}&#xa;\newpage&#xa;&#xa;</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:when>
 
                 <xsl:when test="$level = 2">

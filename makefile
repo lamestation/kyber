@@ -18,6 +18,8 @@ HTML_OUT=$(OUTPUT_DIR)/manual
 INPUT_SPACE=$(shell zipinfo -1 $(SPACE) *index.html)
 INPUT_DIR=$(HOME_DIR)/$(dir $(INPUT_SPACE))
 
+TEX_ENGINE=xelatex
+
 export CLASSPATH=/usr/share/java/saxonb.jar
 
 
@@ -102,9 +104,9 @@ build_latex: assemble_singledocument
 # Run, rerun (build cross-references), display
 # If it works the first time, it will work the second time.
 build_pdf: build_latex
-	pdflatex -halt-on-error -aux-directory=$(OUTPUT_DIR) -output-directory=$(OUTPUT_DIR) $(OUTPUT_TEX)
+	$(TEX_ENGINE) -halt-on-error -aux-directory=$(OUTPUT_DIR) -output-directory=$(OUTPUT_DIR) $(OUTPUT_TEX)
 	cd $(OUTPUT_DIR) ; makeindex $(OUTPUT_IDX)
-	pdflatex -halt-on-error -aux-directory=$(OUTPUT_DIR) -output-directory=$(OUTPUT_DIR) $(OUTPUT_TEX)
+	$(TEX_ENGINE) -halt-on-error -aux-directory=$(OUTPUT_DIR) -output-directory=$(OUTPUT_DIR) $(OUTPUT_TEX)
 
 view_pdf: build_pdf
 	evince $(OUTPUT_PDF)
