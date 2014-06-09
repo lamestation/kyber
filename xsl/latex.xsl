@@ -145,7 +145,9 @@
 
     <xsl:template match="code">
         <xsl:text> \texttt{\path{</xsl:text>
-        <xsl:apply-templates />
+        <xsl:call-template name="escaping">
+            <xsl:with-param name="input" select="string-join(*/text(),'')"/>
+        </xsl:call-template>
         <xsl:text>}} \index{</xsl:text>
         <xsl:apply-templates />
         <xsl:text>} </xsl:text>
