@@ -61,27 +61,7 @@
     <!-- get rid of table images for now -->
     <!--<xsl:template match="td//img|th//img" />-->
     <xsl:template match="td/img|th/img">
-        <xsl:choose>
-            <xsl:when test="@width">
-                <xsl:text> \vspace{0cm}\includegraphics[width = </xsl:text>
-                <xsl:value-of select="number(@width) div 2" />
-                <xsl:text>bp]{</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>  \includegraphics[scale=0.5]{</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-
-        <!-- confluence adds parameters when image effects are used; strip them -->
-        <xsl:choose>
-            <xsl:when test="contains(@src,'?')">
-                <xsl:value-of select="substring-before(@src,'?')" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="@src" /><!-- confluence adds parameters when image effects are used; strip them -->
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>}&#xa;</xsl:text>
+        <xsl:call-template name="image" />
     </xsl:template>
 
 
@@ -173,38 +153,29 @@
 
     <!-- Gliffy Diagrams -->
 
-    <xsl:template match="table[@class='gliffy-macro-table']/tr/td/table[@class='gliffy-macro-inner-table']/tr/td/img[@class='gliffy-macro-image']">
-        <xsl:text>  \includegraphics[width = 3.5in]{</xsl:text>
-
-        <!-- confluence adds parameters when image effects are used; strip them -->
-        <xsl:choose>
-            <xsl:when test="contains(@src,'?')">
-                <xsl:value-of select="substring-before(@src,'?')" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="@src" /><!-- confluence adds parameters when image effects are used; strip them -->
-            </xsl:otherwise>
-        </xsl:choose>
-
-        <xsl:text>}&#xa;</xsl:text>
+    <xsl:template match="table[@class='gliffy-macro-table']">
+        <xsl:apply-templates select=".//img[@class='gliffy-macro-image']" />
     </xsl:template>
 
-    <xsl:template match="table[@class='gliffy-macro-table']/tr/td/table[@class='gliffy-macro-inner-table']/caption"></xsl:template>
-
-    <xsl:template match="table[@class='gliffy-macro-table']/tr/td/table[@class='gliffy-macro-inner-table']/tr/td"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="table[@class='gliffy-macro-table']/tr/td/table[@class='gliffy-macro-inner-table']/tr"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="table[@class='gliffy-macro-table']/tr/td/table[@class='gliffy-macro-inner-table']"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="table[@class='gliffy-macro-table']/tr/td"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="table[@class='gliffy-macro-table']/tr"><xsl:apply-templates /></xsl:template>
-    <xsl:template match="table[@class='gliffy-macro-table']"><xsl:apply-templates /></xsl:template>
-
+    <xsl:template match="img[@class='gliffy-macro-image']">
+        <xsl:call-template name="image" />
+    </xsl:template>
 
     <!-- Images -->
 
     <xsl:template match="p//img">
+        <xsl:call-template name="image" />
+    </xsl:template>
+
+    <xsl:template match="li/img">
+        <xsl:text> \\ </xsl:text>
+        <xsl:call-template name="image" />
+    </xsl:template>
+
+    <xsl:template name="image">
         <xsl:choose>
             <xsl:when test="@width">
-                <xsl:text>  \includegraphics[width = </xsl:text>
+                <xsl:text>  \vspace{0cm}\includegraphics[width = </xsl:text>
                 <xsl:value-of select="number(@width) div 2" />
                 <xsl:text>bp]{</xsl:text>
             </xsl:when>
@@ -255,7 +226,6 @@
 
 
     <!-- Stupid divs and other dumb content -->
-
     <xsl:template match="map"></xsl:template>
 
     <xsl:template match="div[@id='main-content' or @class='wiki-content group']">
@@ -278,9 +248,6 @@
     <xsl:template match="div[@class='innerCell']"><xsl:apply-templates /></xsl:template>
 
     <!-- TOC -->
-
-    <!-- Haven't figured this one out yet -->
-
     <xsl:template match="div[contains(@class,'toc-macro')]"></xsl:template>
     <xsl:template match="div[contains(@class,'cell')]"><xsl:apply-templates /></xsl:template>
     <xsl:template match="div[@class='plugin_pagetree']"></xsl:template>
@@ -408,7 +375,7 @@
     <xsl:template match="div[@class='panelContent']"><xsl:apply-templates /></xsl:template>
 
 
-    <!-- Headers -->
+    <!-- headers -->
 
     <xsl:template match="booksection"><xsl:apply-templates /></xsl:template>
 
@@ -425,11 +392,9 @@
                         <xsl:when test="text() = 'Copyright'">
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:text>&#xa;\newpage
-                                \AddToShipoutPicture*{\ChapterBackgroundPic}
-                                \part{</xsl:text>
+                            <xsl:text>&#xa;\part{</xsl:text>
                             <xsl:apply-templates select="node()" />
-                            <xsl:text>}&#xa;\newpage&#xa;&#xa;</xsl:text>
+                            <xsl:text>}\newpage&#xa;</xsl:text>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
@@ -439,11 +404,9 @@
                         <xsl:when test="text() = 'Copyright'">
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:text>&#xa;\newpage
-                                \AddToShipoutPicture*{\ChapterBackgroundPic}
-                                \chapter{</xsl:text>
+                            <xsl:text>&#xa;\chapter{</xsl:text>
                             <xsl:apply-templates select="node()" />
-                            <xsl:text>}&#xa;\newpage&#xa;&#xa;</xsl:text>
+                            <xsl:text>}\newpage&#xa;</xsl:text>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:when>
