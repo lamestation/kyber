@@ -58,7 +58,7 @@ else:
 
 
     for filename in filenames:
-        print filename
+        #print filename
 
         # Organize list into nice sections before printing output
         f = open(filename).read()
@@ -86,11 +86,12 @@ else:
         for i in r[startpoint::2]:
             label = textblock[i].split('\n')[1]
 
-            if label == 'PUB' or label == 'PRI':
+#            if label == 'PUB' or label == 'PRI':
+            if label == 'PUB':
                 fullblock = label+textblock[i+1]
 
-                title = textblock[i+1].split('\n',1)[0]
-                content[label] += "\n<h3>"+title+"</h3>"
+                title = textblock[i+1].split('\n',1)[0].split('|',1)[0]
+                content[label] += "\n<h2>"+title+"</h2>"
 
                 # Comments will be parsed in markdown for fancier output
                 markdownblock = re.findall("\n.*\'\'.*",fullblock)
@@ -122,10 +123,10 @@ else:
         # Final Formatting
 
         # Add table of contents zones for navigation
-        for l in ('PUB','PRI'):
-            if content[l]:
-                content[l] = '<h2>'+blocknames[l]+'</h2><ac:structured-macro ac:name="toc-zone"><ac:parameter ac:name="location">top</ac:parameter><ac:rich-text-body>' \
-                                + content[l] + '</ac:rich-text-body></ac:structured-macro>'
+#        for l in ('PUB','PRI'):
+#            if content[l]:
+#                content[l] = '<h2>'+blocknames[l]+'</h2><ac:structured-macro ac:name="toc-zone"><ac:parameter ac:name="location">top</ac:parameter><ac:rich-text-body>' \
+#                                + content[l] + '</ac:rich-text-body></ac:structured-macro>'
 
         # Assemble pieces into final page for upload
         finalcontent = ""
