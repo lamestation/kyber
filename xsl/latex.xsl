@@ -58,12 +58,6 @@
         <xsl:text>\hline&#10;</xsl:text>
     </xsl:template>
 
-    <!-- get rid of table images for now -->
-    <!--<xsl:template match="td//img|th//img" />-->
-    <xsl:template match="td/img|th/img">
-        <xsl:call-template name="image" />
-    </xsl:template>
-
 
 
     <!-- center align divs -->
@@ -164,6 +158,9 @@
     </xsl:template>
 
     <!-- Images -->
+    <xsl:template match="td/img|th/img">
+        <xsl:call-template name="image" />
+    </xsl:template>
 
     <xsl:template match="p//img">
         <xsl:call-template name="image" />
@@ -175,16 +172,25 @@
     </xsl:template>
 
     <xsl:template name="image">
+        <xsl:variable name="length" select="string-length(name())" />
+        <xsl:variable name="headlevel" select="number(substring(name(),$length))" />
+        <xsl:variable name="booklevel" select="count(ancestor::booksection)-1" />
+        <xsl:variable name="level" select="$headlevel + $booklevel" />
+
+        <xsl:text>  \vspace{0cm}\includegraphics[</xsl:text>
+
         <xsl:choose>
             <xsl:when test="@width">
-                <xsl:text>  \vspace{0cm}\includegraphics[width = </xsl:text>
+                <xsl:text>width = </xsl:text>
                 <xsl:value-of select="number(@width) div 2" />
-                <xsl:text>bp]{</xsl:text>
+                <xsl:text>bp</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>  \includegraphics[scale = 0.5]{</xsl:text>
+                <xsl:text>scale = 0.5</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
+
+        <xsl:text>]{</xsl:text>
 
         <!-- confluence adds parameters when image effects are used; strip them -->
         <xsl:choose>
