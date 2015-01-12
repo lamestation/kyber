@@ -108,6 +108,9 @@ build_pdf: build_latex
 	cd $(OUTPUT_DIR) ; makeindex $(OUTPUT_IDX)
 	$(TEX_ENGINE) -halt-on-error -aux-directory=$(OUTPUT_DIR) -output-directory=$(OUTPUT_DIR) $(OUTPUT_TEX)
 
+finalize_pdf: build_pdf
+	gs -sDEVICE=pdfwrite -dPDFSETTINGS=/prepress -dNOPAUSE -dQUIET -dBATCH -sOutputFile=$(OUTPUT_FILENAME).small.pdf $(OUTPUT_PDF)
+
 view_pdf: build_pdf
 	evince $(OUTPUT_PDF)
 

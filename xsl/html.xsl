@@ -20,7 +20,6 @@
     <xsl:template match="div[@id='content']"><xsl:apply-templates /></xsl:template>
     <xsl:template match="meta"></xsl:template>
     <xsl:template match="META"></xsl:template>
-    <xsl:template match="br"></xsl:template>
 
 
     <!-- Character escaping -->

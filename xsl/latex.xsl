@@ -40,7 +40,7 @@
 
         <!-- count number of columns -->
         <xsl:for-each select="for $i in 1 to count(./tbody[1]/tr[1]/th|./tbody[1]/tr[1]/td|./thead[1]/tr[1]/th|./thead[1]/tr[1]/td) return $i">
-            <xsl:text>l | </xsl:text>
+            <xsl:text>X | </xsl:text>
         </xsl:for-each>
 
         <xsl:text>}&#10;</xsl:text>
@@ -217,6 +217,7 @@
         <xsl:text>&#xa;</xsl:text>
     </xsl:template>
 
+    <xsl:template match="ul[@class='childpages-macro']"></xsl:template>
     <xsl:template match="ul">
         <xsl:text>\begin{itemize}</xsl:text>
         <xsl:text>&#xa;</xsl:text>
@@ -390,7 +391,7 @@
     <xsl:template match="h0|h1|h2|h3|h4|h5|h6">
         <xsl:variable name="length" select="string-length(name())" />
         <xsl:variable name="headlevel" select="number(substring(name(),$length))" />
-        <xsl:variable name="booklevel" select="count(ancestor::booksection)-1" />
+        <xsl:variable name="booklevel" select="count(ancestor::booksection)" />
         <xsl:variable name="level" select="$headlevel + $booklevel" />
 
         <xsl:if test="$booklevel > 0">

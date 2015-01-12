@@ -10,3 +10,5 @@ output.tex
 *.idx
 *.ilg
 *.ind
+build
+*.pyc

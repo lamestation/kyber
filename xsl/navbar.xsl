@@ -32,7 +32,7 @@
             <!-- First level -->
 
             <xsl:when test="name() = 'ul' and count(ancestor::ul) = 0">
-                <div class="accordion" id="accordion">
+                <div class="panel-group" id="accordion" role="tablist">
                     <xsl:apply-templates />
                 </div>
             </xsl:when>
@@ -44,24 +44,24 @@
             <!-- Second level -->
 
             <xsl:when test="name() = 'ul' and count(ancestor::ul) = 1">
-                <div class="accordion-group">
+                <div class="panel panel-default">
                     <xsl:apply-templates />
                 </div>
             </xsl:when>
 
             <xsl:when test="name() = 'li' and count(ancestor::ul) = 2">
                 <xsl:for-each select="a">
-                    <div class="accordion-heading">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+                    <div class="panel-heading" role="tab">
+                        <a data-toggle="collapse" data-parent="#accordion">
                             <xsl:attribute name="href">#collapse<xsl:value-of select="count(preceding::li)"/></xsl:attribute>
                             <xsl:apply-templates />
                         </a>
                     </div>
                 </xsl:for-each>
 
-                <div class="accordion-body collapse">
+                <div class="panel-collapse collapse in">
                     <xsl:attribute name="id">collapse<xsl:value-of select="count(preceding::li)"/></xsl:attribute>
-                    <div class="accordion-inner">
+                    <div class="panel-body">
                         <ul>
                             <xsl:for-each select="ul">
                                 <xsl:apply-templates />
@@ -86,8 +86,8 @@
         <xsl:choose>
             <xsl:when test="count(ancestor::ul) = 1"></xsl:when>
             <xsl:when test="count(ancestor::ul) = 2">
-                <div class="accordion-heading">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                <div class="panel-heading">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                         <xsl:attribute name="href">
                             <xsl:value-of select="@href" />
                         </xsl:attribute>
