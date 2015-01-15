@@ -15,8 +15,9 @@ def image(tag):
 
 def fix_anchors(node):
     for a in node.find_all('a'):
-        if os.path.isfile(a['href']):
-            a['href'] = '#'+a['href']
+        if 'href' in a:
+            if os.path.isfile(a['href']):
+                a['href'] = '#'+a['href']
 
 def fix_links(node):
     for a in node.find_all('a'):
