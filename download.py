@@ -2,19 +2,24 @@
 # -*- coding: utf-8 -*-
 
 import os, sys, re
+import codecs
 
 import argparse
 import getpass
 
 import xmlrpclib
 import requests
-import glob
 
 import zipfile
 
-from HTMLParser import HTMLParser
-
 import pypandoc
+
+from parsers import html, pageindex
+
+import webbrowser
+import urlparse, urllib
+from bs4 import BeautifulSoup
+
 
 home = os.path.dirname(os.path.abspath(__file__))
 
@@ -22,6 +27,9 @@ parser = argparse.ArgumentParser(description='Export a Confluence Space')
 
 parser.add_argument('-u','--url', nargs=1, metavar='URL', help='Download space first from server URL')
 parser.add_argument('-s','--space', nargs=1, metavar='SPACE', required=True, help='Space key')
+parser.add_argument('--single-page', action='store_true', help='Render output to single page (auto-set by --pdf)')
+parser.add_argument('--pdf', action='store_true', help='Render output to PDF')
+parser.add_argument('--toc', action='store_true', help='Add table of contents to single-page document')
 
 args = parser.parse_args()
 
@@ -92,6 +100,8 @@ def read_last():
 
 create_dir("build")
 os.chdir("build")
+write_last(args.space[0])
+
 create_dir(args.space[0])
 os.chdir(args.space[0])
 
@@ -104,135 +114,60 @@ last = read_last()
 create_dir(args.space[0])
 os.chdir(args.space[0])
 
-import lxml.etree as ET
-from bs4 import BeautifulSoup
+if args.pdf or args.single_page:
+    singlepage = True
+else:
+    singlepage = False
 
+print singlepage
 
-def remove_tag(root, tag, class_=None, id=None):
-    if class_ == None and not id == None:
-        res = root.find_all(tag, id=id)
-    if not class_ == None and id == None:
-        res = root.find_all(tag, class_=class_)
-    if not class_ == None and not id == None:
-        res = root.find_all(tag, class_=class_, id=id)
-    if class_ == None and id == None:
-        res = root.find_all(tag)
-
-    for h in res:
-        h.decompose()
-
-
-def build_toc(node):
-    remove_tag(node,'div',id='footer')
-    remove_tag(node,'div','pageSection','main-content')
-    remove_tag(node,'div','pageSectionHeader')
-    remove_tag(node,'div',id='main-header')
-    remove_tag(node,'img')
-    return node.find('div','pageSection').ul
-
-def header(tag, level):
-    tag.attrs = {}
-    #return '\n#'*(level)+' '+tag.text+'\n'
-
-
-def link(tag):
-    output = ""
-    output += '['+tag.text+']'
-    output += '('+tag['href']+')'
-    return output
-
-def title_index(node):
-    output = node.find('title').text
-    output = re.sub('.*\((.*)\)','\g<1>', output)
-    return output.lstrip()
-
-def title_page(node):
-    output = node.find('title').text.split(':')[1:]
-    output = ':'.join(output).lstrip()
-    return output
-
-
-def makelist(item, depth, char='*'):
-    output = ""
-    if depth > 0: 
-        output += "<ul>"
-        output += "<li>"
-#        output += ' '*(depth-1)*2 + ' '+char+' '
-#        output += link(item.a)
-        output += item.a.prettify()
-        output += '\n'
-
-    for x in item.li.find_all('ul',recursive=False):
-        output += makelist(x, depth+1, char)
-
-    if depth > 0:
-        output += "</li>"
-        output += "</ul>"
-
-    return output
-
-def image(tag):
-    src = tag.attrs['src']
-    if 'width' in tag.attrs:
-        tag.attrs = {'width':tag.attrs['width']}
-    else:
-        tag.attrs = {}
-
-    tag.attrs['src'] = src
-
-def gliffy_diagram(tag):
-    pass
-
-def build_index():
-    f = open('index.html').read()
-    s = BeautifulSoup(f)
-    toc = build_toc(s)
-    output = ""
-    output += "<h1>"+title_index(s)+"</h1>"
-    
-    for l in s.find_all('a'):
-        l['href'] = os.path.splitext(l['href'])[0]+'.md'
-
-    output += makelist(toc,0)
-
-    return output
-
-def build_page(node):
-    remove_tag(node,'div',id='footer')
-    remove_tag(node,'head')
-    node = node.find('div','wiki-content group',id='main-content')
-
-    [x.unwrap() for x in node.find_all('span','confluence-embedded-file-wrapper')]
-
-    [image(x) for x in node.find_all('img')]
-
-    #[header(x,1) for x in node.find_all('h1')]
-    #[header(x,2) for x in node.find_all('h2')]
-    #[header(x,3) for x in node.find_all('h3')]
-    #[header(x,4) for x in node.find_all('h4')]
-    #[header(x,5) for x in node.find_all('h5')]
-    #[header(x,6) for x in node.find_all('h6')]
-    return node
-
-
-g = open('index.md','w')
-g.write(build_index())
+index = pageindex.index()
+index.configure(fixlinks=singlepage)
+text = index.markdown(mindepth=1)
+g = codecs.open('index.md','w',encoding='utf-8')
+g.write(text)
 g.close()
 
-for filename in glob.glob('*.html'):
-    if not filename == 'index.html':
-        f = open(filename).read()
-        s = BeautifulSoup(f)
+print index.pagelist()
 
-        title = '<h1>'+title_page(s)+'</h1>\n'
-        output = build_page(s).prettify()
-#        output = pypandoc.convert(output,'markdown', format='html')
-        output = title + output
+for i in index.pagelist():
+    filename = i['url']
+    f = codecs.open(filename, encoding='utf-8').read()
+    s = BeautifulSoup(f)
 
-        newname = os.path.splitext(filename)[0]
+    l = i['depth']+1
+    output = html.page(s,depth=l-1,singlepage=singlepage).prettify()
+    #output = pypandoc.convert(output,'markdown', format='html')
+    output = '<h'+str(l)+' id="'+i['url']+'">'+i['name']+'</h'+str(l)+'>\n' + output
 
-        f = open(newname+'.md','w')
-        f.write(output.encode('utf-8'))
-        f.close()
-        #print output.encode('utf-8')
+    newname = os.path.splitext(filename)[0]+'.md'
+    f = codecs.open(newname,'w',encoding='utf-8')
+    f.write(output)
+    f.close()
 
+    #print output
+
+if singlepage:
+    f = codecs.open('_output_.md','w',encoding='utf-8')
+
+    if args.toc:
+        f.write('<h1>Contents</h1>\n')
+        f.write(index.html(mindepth=1))
+        f.write(html.pagebreak())
+
+    for i in index.pagelist():
+        filename = os.path.splitext(i['url'])[0]+u'.md'
+        text = codecs.open(filename,'r',encoding='utf-8').read()+u'\n'
+        text = text + html.pagebreak()
+        f.write(text)
+
+    f.close()
+
+if args.pdf:
+    import weasyprint
+    src = weasyprint.HTML(filename='_output_.md')
+    doc = src.render(stylesheets=["../../../CSS21-print.css"])
+    doc.resolve_links()
+#    for d in doc.pages:
+#        print d.links
+    doc.write_pdf("_output_.pdf")
