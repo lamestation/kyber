@@ -1,49 +1,91 @@
-# Welcome To Kyber
+# Kyber - a free publishing tool for Confluence
 
-Anyone who has ever used Confluence was probably super excited about all the output formats it supported... until you actually tried it. Well, Kyber is here to help.
+Kyber is a publishing tool that allows you to get the most out of your
+Confluence installation. The export tools built into Confluence can only minimally
+be customized.
 
-Kyber is the publishing toolchain for LameStation's printed books and manuals. It facilitates authoring print-quality documents within Confluence. With Kyber, you can make documents that look like they came from O'Reilly, not your apartment.
+Kyber is written in Python 2.7.
 
-"But Confluence already does HTML and PDF export!" you may say. Well, not like this; not with this level of granularity and control over the output.
-
-## Features
-
-* Doxygen-style source code markup rendered to Confluence pages
-* LaTeX-driven PDF generation from Confluence pages
-* Tables, images, and figures that look good and don't spill off the page
-* Intelligent image placement based on image and paper size and dimensions
-* Add captions, indexes, footnotes, no problem
 
 ## Installation
 
-### On Ubuntu
+Kyber depends on Beautiful Soup 4, Python Markdown, and WeasyPrint. You can get 
+the first two from **apt**, but WeasyPrint will require `pip`. Then again, you 
+can just get them all from `pip`.
 
-    sudo apt-get install xsltproc libxml2-utils tidy libsaxonb-java
-    sudo apt-get install texlive-latex-base texlive-latex-extra texlive-fonts-extra
-    sudo apt-get install texlive-latex-recommended
+```
+sudo apt-get install python-bs4 python-markdown
+sudo pip install weasyprint
+```
+
+A Confluence toolchain will also require Confluence, so you should probably 
+get one if you don't already have one.
 
 ## Usage
 
-First, open up your Confluence installation and [export your space in HTML format](https://confluence.atlassian.com/display/DOC/Exporting+Confluence+Pages+and+Spaces+to+HTML).
-If you don't have a Confluence installation, [get one, it's awesome!](https://www.atlassian.com/software/confluence)
+Kyber uses Confluence's XML-RPC API, so exporting the space manually is not
+necessary.
 
-Once you've downloaded your space export, download the project and browse to the project root. Run the kyber script to get you started. Simply
-pass the export as a parameter.
+You will need export permission on the space which you plan to extract. Pass the
+ space key with `-s` and the URL of the Confluence wiki with `-u`; Kyber will 
+export and download the target space for you.
 
-Kyber currently supports PDF and HTML outputs.
+```
+kyber -s LTM -u https://lamestation.atlassian.net/wiki/
+```
 
-Generate a PDF output of your space. Watch as your space is rendered in glorious PDF:
+Output will be generated in the `build/` directory.
 
-    make pdf SPACE=yourspace.zip
+If the space key is given without a URL, the last download of that space will be
+re-run.
 
-Generate a fancy HTML manual from your space:
+```
+kyber -s LTM
+```
 
-    make website SPACE=manual.zip
+The space key *must* be passed for Kyber to run.
+
+## Output Formats
+
+Kyber can be used to generate PDF and HTML output. Since Confluence already generates HTML
+output, Kyber's role in this is more about style and presentation, as the output can be customized a great
+deal more using Kyber than the built-in space exporter.
+
+### Multi-page HTML
+
+By default, Kyber produces a multi-page HTML document, largely a repackaged version of Confluence's
+built-in export.
+
+This HTML output will appear in:
+
+```
+build/<SPACE>/<SPACE>/
+```
+
+### Single-page hTML
+
+The `--single-page` parameter to generate a single file document at:
+
+```
+build/<SPACE>/<SPACE>/_output_.md
+```
+
+### PDF
+
+The `--pdf` parameter will generate a styled PDF using WeasyPrint at:
+
+```
+build/<SPACE>/<SPACE>/_output_.pdf
+```
+
+**Kyber is in development and some things aren't working right or don't work at all. Please help improve Kyber!**
 
 ### Bug Reporting
 
-Please report all Kyber bugs to the [issue tracker](https://github.com/lamestation/kyber/issues).
+Report any Kyber bugs to the [issue 
+tracker](https://github.com/lamestation/kyber/issues).
 
-## Author
+## License
 
-This tool was originally developed for in-house use at [LameStation](htp://www.lamestation.com)  by Brett Weir.
+Copyright (c) 2015 LameStation LLC. This software is released under a GPLv3 license.
+

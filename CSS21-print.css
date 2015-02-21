@@ -14,7 +14,6 @@
         content: "Page " counter(page) " of " counter(pages);
     }
     @left-top {
-        content: "W3C Recommendation"; font: .5cm/1.5 Fontin Sans;
         background: #005a9c; color: #fff; text-align: right;
         padding-right: 2em; height: 1.5em; width: 10cm;
         transform-origin: 100% 0;
@@ -22,18 +21,24 @@
     }
 }
 html, body {
-    font: 10pt/1.25 Droid Sans, sans-serif !important; -weasy-hyphens: auto }
+    font: 10pt/1.25 Droid Sans, sans-serif !important;
+    -weasy-hyphens: auto;
+}
 body {
     text-align: justify; padding: 0 !important;
     background: none !important; 
 }
 hr.navbar { display: none }
 h1 { page-break-before: auto !important; 
-     margin-top: 0 !important;
-     color: #007FFF;
- }
+    margin-top: 0 !important;
+    color: #007FFF;
+}
 h1, h2, h3, h4 { font-family: inherit !important }
 
 img {
     image-resolution: 200dpi;
+}
+a {
+    color: #FF00FF;
+    text-decoration: none;
 }
