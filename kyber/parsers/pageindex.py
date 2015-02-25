@@ -5,9 +5,26 @@ import functions
 import markdown
 
 class Index:
-    def __init__(self):
+    def __init__(self,indexfile):
         self.pages = []
         self.fixlinks = False
+
+        f = open(indexfile).read()
+        self.root = BeautifulSoup(f)
+        self.toc = self.table_of_contents(self.root)
+        self.makelist(self.toc,0)
+
+        self.title = self.title_index(self.root)
+        print self.markdown(ordered=True, mindepth=2)
+        print markdown.markdown(self.markdown(ordered=True, mindepth=2))
+
+    def table_of_contents(self, node):
+        functions.remove_tag(node,'div',id='footer')
+        functions.remove_tag(node,'div','pageSection','main-content')
+        functions.remove_tag(node,'div','pageSectionHeader')
+        functions.remove_tag(node,'div',id='main-header')
+        functions.remove_tag(node,'img')
+        return node.find('div','pageSection').ul
 
     def add(self, item):
         self.pages.append(item)
@@ -25,6 +42,10 @@ class Index:
     def configure(self, fixlinks=False):
         self.fixlinks = fixlinks
 
+    def title_index(self, node):
+        output = node.find('title').text
+        output = re.sub('.*\((.*)\)','\g<1>', output)
+        return output.lstrip()
 
     def pagelist(self):
         return self.pages
@@ -49,7 +70,7 @@ class Index:
                     filename = i['url']
                 else:
                     filename = os.path.splitext(i['url'])[0]+'.md'
-                output += link(i['name'], h+filename)
+                output += self.link(i['name'], h+filename)
                 output += '\n'
 
         return output
@@ -57,39 +78,8 @@ class Index:
     def html(self, mindepth=0, ordered=False):
         return markdown.markdown(self.markdown(ordered=ordered, mindepth=mindepth))
 
-def link(name, url):
-    output = ""
-    output += '['+name+']'
-    output += '('+url+')'
-    return output
-
-
-def title_index(node):
-    output = node.find('title').text
-    output = re.sub('.*\((.*)\)','\g<1>', output)
-    return output.lstrip()
-
-def table_of_contents(node):
-    functions.remove_tag(node,'div',id='footer')
-    functions.remove_tag(node,'div','pageSection','main-content')
-    functions.remove_tag(node,'div','pageSectionHeader')
-    functions.remove_tag(node,'div',id='main-header')
-    functions.remove_tag(node,'img')
-    return node.find('div','pageSection').ul
-
-
-
-def index():
-    f = open('index.html').read()
-    s = BeautifulSoup(f)
-    toc = table_of_contents(s)
-    output = ""
-    output += "<h1>"+title_index(s)+"</h1>"
-
-    index = Index()
-    index.makelist(toc,0)
-    print index.markdown(ordered=True, mindepth=2)
-    print markdown.markdown(index.markdown(ordered=True, mindepth=2))
-
-    return index
-
+    def link(self, name, url):
+        output = ""
+        output += '['+name+']'
+        output += '('+url+')'
+        return output
