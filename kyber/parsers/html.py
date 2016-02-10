@@ -21,8 +21,9 @@ def fix_anchors(node):
 
 def fix_links(node):
     for a in node.find_all('a'):
-        if os.path.isfile(a['href']):
-            a['href'] = os.path.splitext(a['href'])[0]+'.md'
+        if 'href' in a:
+            if os.path.isfile(a['href']):
+                a['href'] = os.path.splitext(a['href'])[0]+'.md'
 
 
 def header(tag, depth, mindepth):

@@ -11,6 +11,7 @@ import xmlrpclib
 import requests
 
 import zipfile
+import html2text
 
 from parsers import html, pageindex
 
@@ -140,7 +141,10 @@ def console():
 
         l = i['depth']+1
         output = html.page(s,depth=l-1,singlepage=singlepage).prettify()
-        output = '<h'+str(l)+' id="'+i['url']+'">'+i['name']+'</h'+str(l)+'>\n' + output
+        output = html2text.html2text(output)
+
+        output = l*'#' + ' ' +i['name']+'\n\n' + output
+        #output = '<h'+str(l)+' id="'+i['url']+'">'+i['name']+'</h'+str(l)+'>\n' + output
 
         newname = os.path.splitext(filename)[0]+'.md'
         f = codecs.open(newname,'w',encoding='utf-8')
